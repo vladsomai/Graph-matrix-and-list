@@ -2,28 +2,6 @@
 #include "Graf_a.h"
 
 
-/*
-Aplicaţia 10.1
-Se cere să se implementeze TDA graf (Varianta 1, Shiflet) utilizând matrici de adiacenţe.
-Se vor implementa următorii operatori: InitGraf, GrafVid, GrafPlin, InserNod,
-InserArc, SuprimNod, SuprimArc. Tabloul nodurilor se consideră neordonat. Se cere
-să se precizeze performanţele operatorilor implementaţi în termenii funcţiei O.
-
-=========================================================================================
-
-
-Vom defini o structura de date "Node" care va reprezenta nodurile grafului
-
-La inserarea fiecarui arc(link) vom cauta cele 2 noduri din graf dupa care le vom linkui unul cu celalalt(nod a-> nod b && nod b->nod a).
-
-Vom afisa matricea de adiacenta la sfarsitul introducerii datelor.
-
-
-
-Complexitatea acestui algorithm este O(n^2) deoarece avem o matrice de MxM
-*/
-
-
 namespace matrix_graf
 {
 
@@ -36,9 +14,6 @@ namespace matrix_graf
 		menu(matrix_graf);
 
 	}
-
-
-
 
 
 	void menu(shared_ptr<Graf> graf)

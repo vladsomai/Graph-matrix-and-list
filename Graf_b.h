@@ -27,6 +27,10 @@ namespace structure_graf
 		void InsertArcParam(bool,int,int);
 
 
+		void DepthFirstSearch();
+		void BreadthFirstSearch();
+
+
 		void PrintStructure();
 		//------------------------------------------------------------
 
@@ -775,6 +779,16 @@ namespace structure_graf
 
 	}
 
+
+
+	void DepthFirstSearch()
+	{
+
+	}
+	void BreadthFirstSearch()
+	{
+
+	}
 
 
 }

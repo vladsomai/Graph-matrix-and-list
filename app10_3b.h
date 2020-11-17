@@ -2,18 +2,7 @@
 #include "Graf_b.h"
 
 
-/*
-Aplicaţia 10.3
-Se cere să se redacteze un program care realizează următoarele activităţi:
- (1) Acceptă la intrare un graf precizat prin mulţimea nodurilor şi arcelor sale;
- (2) Vizualizează graful afişând lista nodurilor şi lista arcelor sale
- (3) Listează nodurile în ordinea parcurgerii lor pe baza căutării în adâncime;
-Programul se va realiza în două variante:
-a) Graf reprezentat prin matrice de adiacenţe;
-b) Graf reprezentat prin structuri de adiacenţe.
-Se vor utiliza reprezentările şi operatorii de la problemele 10.1 respectv 10.2
 
-*/
 
 namespace structure_graf
 {
@@ -28,9 +17,6 @@ namespace structure_graf
 		menu(structure_graf);
 
 	}
-
-
-
 
 
 	void menu(shared_ptr<Graf> graf)

@@ -34,6 +34,8 @@ namespace matrix_graf
 		void InsertArc(bool);
 		void InsertArcParam(bool,int,int);
 
+		void DepthFirstSearch();
+		void BreadthFirstSearch();
 
 		void PrintMatrix();
 		//------------------------------------------------------------
@@ -570,6 +572,16 @@ namespace matrix_graf
 			return;
 
 		}
+
+	}
+
+
+	void DepthFirstSearch()
+	{
+
+	}
+	void BreadthFirstSearch()
+	{
 
 	}
 
