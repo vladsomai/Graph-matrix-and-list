@@ -43,6 +43,10 @@ namespace structure_graf
 			cout << "6.Afisare noduri graf.\n";
 			cout << "7.Afisare structura.\n";
 
+			cout << "8.Cautare prin adancime - DFS.\n";
+			cout << "9.Cautare prin cuprindere - BFS.\n";
+
+
 			cout << "0.Exit.\n";
 
 			cout << "Optiunea dvs. : ";
@@ -81,6 +85,14 @@ namespace structure_graf
 				break;
 			case 7:
 				graf->PrintStructure();
+				cout << endl;
+				break;
+			case 8:
+				graf->DepthFirstSearch();
+				cout << endl;
+				break;
+			case 9:
+				graf->BreadthFirstSearch();
 				cout << endl;
 				break;
 

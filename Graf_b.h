@@ -1,4 +1,5 @@
 #include"Node_b.h"
+#include <queue>
 
 namespace structure_graf
 {
@@ -9,34 +10,35 @@ namespace structure_graf
 
 	private:
 		list<shared_ptr<Node>> NoduriGraf;//lista care v-a retine adresele fiecarui nod din graf (head - capul listei inlantuite)
+		queue< shared_ptr<Node> > que{};//queue pentru implementarea functiei de cautare prin cuprindere
+		list < shared_ptr<Node> >NodesSearchedInGraf{};//lista in care vom insera nodurile parcurse de BFS, dupa care o vom afisa in ordinea in care au fost inserate noduri.
+
 
 	public:
-
-		/*functiile grafului*/
-//------------------------------------------------------------
-       //void InitGraf();graful se va initializa cu un graf vid atunci cand cream un obiect de tip "Graf", contructorul clasei "Graf" creaza o multime vida de noduri.
+        //------------------------------------------------------------
 		bool GrafVid();
-
 		void InsertNode();
 		void SuprimNod();
-
-
 		void InsertNodeParam(int);
-		//functia de insertie sau suprimare arc - parametrul bool decide daca inseram sau stergem
-		void InsertArc(bool);
-		void InsertArcParam(bool,int,int);
 
+		void InsertArcParam_beta(bool, int, int);
 
 		void DepthFirstSearch();
 		void BreadthFirstSearch();
 
-
+		bool NodeExistsInQueue(shared_ptr<Node>);
+		bool NodeExistsInNodesSearchedInGraf(shared_ptr<Node>);
+		
 		void PrintStructure();
-		//------------------------------------------------------------
-
 		void afisareNoduriGraf();
 
-		//constructor - initializare obiect graf
+		list<shared_ptr<Node>> ScanNode(shared_ptr<Node>);
+
+		bool NodeExistsInList(shared_ptr<Node> , list < shared_ptr<Node>> );
+		//------------------------------------------------------------
+
+
+		//constructor - initializare obiect graf - InitGraf()
 		Graf()
 		{
 
@@ -132,199 +134,8 @@ namespace structure_graf
 
 	}
 
-	//Performanta : O(3n)
-	//Prima cautare in Lista grafulu
-	//A doua cautare in lista primul nod
-	//A treia cautare in lista nodului 2
-	void Graf::InsertArc(bool ConnectionType)
-	{
 
-		if (this->GrafVid())
-		{
-
-			return;
-
-		}
-
-		int number1{}, number2{};
-
-		//aceste nodri vor retine adresele nodurilor la care dorim sa inseram un arc (source - target)
-		shared_ptr<Node> pointerToFirstNode;
-		shared_ptr<Node> pointerToSecondNode;
-
-
-
-
-		int number1WasFound{ false };
-		int number2WasFound{ false };
-		cout << "Introduceti doua noduri pe care doriti sa le conectati / deconectati: " << endl;
-
-		cout << "Primul numar: "; cin >> number1;
-		cout << "Al doilea numar: "; cin >> number2;
-
-		try
-		{
-
-
-			//ne asiguram prima data ca numerele la care dorim sa introducem un arc exista in graf
-			//iteram in lista pana cand gasim nodul la care dorim sa ii adaugam un arc
-			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
-			{
-
-				//daca cheia nodului urmator din iteratie este egala cu numarul pe care dorim sa il aflam setam pe true si inregistram adresa nodului in variabila pointerToNode
-				if (number1 == actual->get()->getData())
-				{
-
-					cout << "Primul numar a fost gasit in graf" << endl;
-					number1WasFound = true;
-					pointerToFirstNode = *actual;//salvam adresa nodului pentru operatii viitoare
-
-				}
-
-				if (number2 == actual->get()->getData())
-				{
-					cout << "Al doilea numar a fost gasit in graf" << endl;
-					number2WasFound = true;
-					pointerToSecondNode = *actual;//salvam adresa nodului pentru operatii viitoare
-
-				}
-
-			}
-
-			//dupa ce am gasit numerele facem legaturile
-			if (number1WasFound && number2WasFound)
-			{
-
-				//cream doua noduri noi care vor copia cheia nodurilor la care dorim sa inseram un arc
-				shared_ptr<Node> pointerToNextNode1 = make_shared<Node>();
-				shared_ptr<Node> pointerToNextNode2 = make_shared<Node>();
-
-				//--------------------------------------Nodul 1------------------------------------------------------------
-
-				shared_ptr<Node> temp1 = pointerToFirstNode;//retinem adresa primului nod
-
-				//iteram in lista inlantuita ale nodului la care dorim sa adaugam /stergem un link
-				while (pointerToFirstNode != nullptr)
-				{
-
-					//daca dorim sa facem legatura
-					if (ConnectionType == true)
-					{
-
-						if (pointerToFirstNode->getNext() == nullptr)//daca nodul are adresa de next nullptr inseamna ca putem adauga un nod in coada
-						{
-
-							//setam valorile noului nod ca si cele ale nodului 2
-							pointerToNextNode1->setData(pointerToSecondNode->getData());//atribuim noului nod creat valoarea de la nodul 2
-
-							pointerToFirstNode->setNext(pointerToNextNode1);//punem adresa noului nod in next-ul listei capului de graf
-
-							cout << "Succes! Link creat pentru nodul 1 catre nodul 2" << endl;
-							break;
-
-						}
-
-					}
-					else//daca dorim sa stergem legatura
-					{
-
-						if (pointerToFirstNode->getNext()->getData() == pointerToSecondNode->getData())//daca nodul next are are cheia egala cu nodul 2 atunci putem efectua delinkuirea
-						{
-
-							pointerToFirstNode->setNext(pointerToFirstNode->getNext()->getNext());//punem adresa nodului actual->next->next in actual->next(ocolim nodul cu cheia din nodul 2)
-
-							cout << "Succes! Link sters pentru nodul 1 de la nodul 2" << endl;
-							break;
-
-						}
-
-					}
-
-
-					pointerToFirstNode = pointerToFirstNode->getNext();//setam adresa urmatoare in loop daca nu am intrat in "if"
-
-				}
-
-				pointerToFirstNode = temp1;//restabilim adresa primului nod
-
-				//----------------------------------------Nodul 2-----------------------------------------------------------
-
-				shared_ptr<Node> temp2 = pointerToSecondNode;//retinem adresa nodului 2
-
-				//iteram in lista inlantuita ale nodului la care dorim sa adaugam un link
-				while (pointerToSecondNode != nullptr)
-				{
-
-					if (ConnectionType == true)
-					{
-
-						if (pointerToSecondNode->getNext() == nullptr)
-						{
-
-							//setam valorile noului nod ca si cele ale nodului 1
-							pointerToNextNode2->setData(pointerToFirstNode->getData());//atribuim noului nod creat valoarea de la nodul 1
-
-							pointerToSecondNode->setNext(pointerToNextNode2);//punem adresa noului nod in next-ul listei capului de graf
-							cout << "Succes! Link creat pentru nodul 2 catre nodul 1" << endl;
-							break;
-
-						}
-
-					}
-					else
-					{
-
-						if (pointerToSecondNode->getNext()->getData() == pointerToFirstNode->getData())//daca nodul next are are cheia egala cu nodul 2 atunci putem efectua delinkuirea
-						{
-
-							pointerToSecondNode->setNext(pointerToSecondNode->getNext()->getNext());//punem adresa nodului actual->next->next in actual->next(ocolim nodul cu cheia din nodul 2)
-
-							cout << "Succes! Link sters pentru nodul 2 la nodul 1" << endl;
-							break;
-
-						}
-
-					}
-
-					pointerToSecondNode = pointerToSecondNode->getNext();//setam adresa urmatoare in loop daca nu am intrat in "if"
-
-				}
-
-				pointerToSecondNode = temp2;//restabilim adresa nodului doi
-
-			}
-
-		}
-		catch (exception e)
-		{
-
-			cout << e.what() << endl;
-			return;
-
-		}
-
-		if (!number1WasFound)
-		{
-
-			cout << "Numarul " << number1 << " nu exista in graf" << endl;
-			return;
-
-		}
-
-		if (!number2WasFound)
-		{
-
-			cout << "Numarul " << number2 << " nu exista in graf" << endl;
-			return;
-
-		}
-
-	}
-
-
-
-
-
+	/*
 	//Performanta O(2n)
 	void Graf::SuprimNod()
 	{
@@ -348,7 +159,7 @@ namespace structure_graf
 		daca stergem un nod care are arc existent catre alt nod, va trebui sa cautam acel nod cu cheia egala cu nodul pe care l-am sters.
 		Ex: avem nodurile "2" si "6" in graf cu arc intre ele 2->6->null respectiv 6->2->null
 		Dorim sa stergem nodul 6, facem call de functia erase de nodul "6", dupa care trebuie sa cautam in tot graful daca exista un link catre "6" si sa il stergem si de acolo.
-		*/
+		
 
 
 		cout << "Introduceti numarul pe care doriti sa il stergeti: ";
@@ -438,6 +249,8 @@ namespace structure_graf
 		}
 
 	}
+	
+	*/
 
 	//functia de afisare noduri graf, iteram in lista care retine adresa nodurilor aici afisam doar nodurile prezente in graf, nu si structura grafului
 	void Graf::afisareNoduriGraf()
@@ -590,11 +403,181 @@ namespace structure_graf
 	}
 
 
-	//Performanta : O(3n)
-	//Prima cautare in Lista grafulu
-	//A doua cautare in lista primul nod
-	//A treia cautare in lista nodului 2
-	void Graf::InsertArcParam(bool ConnectionType,int number1,int number2)
+	void print_queue(queue<shared_ptr<Node>> q)
+	{
+		cout << "Queue: ";
+
+		while (!q.empty())
+		{
+
+			cout << q.front()->getData() << "\t";
+			q.pop();
+
+		}
+
+	}
+
+	void print_list(list<shared_ptr<Node>> li)
+	{
+
+
+		cout << "List: ";
+		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
+		{
+
+			cout << iterator->get()->getData() << "\t";
+
+		}
+
+		cout << endl;
+
+	}
+
+	bool structure_graf::Graf::NodeExistsInQueue(shared_ptr<Node> actual)
+	{
+		queue<shared_ptr<Node>> tempqueue = this->que;
+
+		while (!tempqueue.empty())
+		{
+
+			if (tempqueue.front()->getData() == actual->getData())
+			{
+
+				return true;
+			
+			}
+
+			tempqueue.pop();
+		}
+
+		return false;
+
+	}
+
+	bool  structure_graf::Graf::NodeExistsInNodesSearchedInGraf(shared_ptr<Node> actual)
+	{
+		
+		for (auto iterator = this->NodesSearchedInGraf.begin(); iterator != this->NodesSearchedInGraf.end(); ++iterator)
+		{
+
+			if (iterator->get()->getData() == actual->getData())
+			{
+			
+				return true;
+		
+			}
+		
+		}
+
+		return false;
+
+	}
+
+	bool  structure_graf::Graf::NodeExistsInList(shared_ptr<Node> actual , list<shared_ptr<Node>> li)
+	{
+
+		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
+		{
+
+			if (*iterator == actual)
+			{
+
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+	/*
+	functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue
+	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf)
+	folosim variabila "actual" pentru a itera in graf
+	*/
+	void structure_graf::Graf::BreadthFirstSearch()
+	{
+
+		cout << "\n=======Cautare prin cuprindere=======" << endl;
+
+		shared_ptr<Node> actual = nullptr;
+		
+		que.push(*(this->NoduriGraf.begin()));//punem primul nod  in queue
+
+		list<shared_ptr<Node>> ConnectedNodesToActual{};
+
+		
+		
+		while (!que.empty())//atata timp cat in queue avem noduri vom face traversarea grafului
+		{
+
+			actual = que.front();//punem in actual primul nod din queue
+			NodesSearchedInGraf.push_back(actual);//punem nodul la care am ajuns intr-o lista pe care o vom afisa la sfarsit
+
+			ConnectedNodesToActual = ScanNode(actual);
+			print_list(ConnectedNodesToActual);
+			
+			//verificam ca nodurile pe care le-am gasit adiacente la actual sa nu fie in lista sau queue de noduri deja parcurse.
+			for (auto iterator = ConnectedNodesToActual.begin(); iterator != ConnectedNodesToActual.end(); ++iterator)
+			{
+				
+				if (NodeExistsInQueue(*iterator) || NodeExistsInNodesSearchedInGraf(*iterator))
+				{
+
+					continue;
+
+				}
+				else
+				{
+
+					que.push(*iterator);//adaugam nodul in queue daca nu a fost deja 
+
+				}
+
+			}
+
+			que.pop();//stergem primul nod
+
+		}
+		
+
+		
+	   
+	
+	}
+
+	void structure_graf::Graf::DepthFirstSearch()
+	{
+
+	}
+
+
+
+	//functie care ne va returna o lista cu nodurile legate la nodul parametru - scanam ce noduri sunt legate la parametru
+	list<shared_ptr<Node>> structure_graf::Graf::ScanNode(shared_ptr<Node> actual)
+	{
+		list<shared_ptr<Node>> ConnectedNodes{}; ConnectedNodes.clear(); //cream lista
+
+		actual = actual->getNext();//incepem lista cu urmatorul element - nu vom adauga in lista elementul actual din parametrul functiei ci doar nodurile legate.
+
+		while (actual != nullptr)
+		{
+
+			ConnectedNodes.push_back(actual);
+			actual = actual->getNext();
+
+		}
+
+		print_list(ConnectedNodes);
+
+		return ConnectedNodes;
+	}
+
+
+
+	void structure_graf::Graf::InsertArcParam_beta(bool ConnectionType, int source, int target)
 	{
 
 		if (this->GrafVid())
@@ -604,17 +587,13 @@ namespace structure_graf
 
 		}
 
-		//int number1{}, number2{};
-
 		//aceste nodri vor retine adresele nodurilor la care dorim sa inseram un arc (source - target)
-		shared_ptr<Node> pointerToFirstNode;
-		shared_ptr<Node> pointerToSecondNode;
+		shared_ptr<Node> pointerToSourceNode;
+		shared_ptr<Node> pointerToTargetNode;
 
+		int targetWasFound{ false };
+		int sourceWasFound{ false };
 
-
-
-		int number1WasFound{ false };
-		int number2WasFound{ false };
 		cout << "Introduceti doua noduri pe care doriti sa le conectati / deconectati: " << endl;
 
 		cout << "Primul numar: ";   // cin >> number1;
@@ -630,125 +609,55 @@ namespace structure_graf
 			{
 
 				//daca cheia nodului urmator din iteratie este egala cu numarul pe care dorim sa il aflam setam pe true si inregistram adresa nodului in variabila pointerToNode
-				if (number1 == actual->get()->getData())
+				if (source == actual->get()->getData())
 				{
 
 					cout << "Primul numar a fost gasit in graf" << endl;
-					number1WasFound = true;
-					pointerToFirstNode = *actual;//salvam adresa nodului pentru operatii viitoare
+					sourceWasFound = true;
+					pointerToSourceNode = *actual;//salvam adresa nodului pentru operatii viitoare
 
 				}
 
-				if (number2 == actual->get()->getData())
+				if (target == actual->get()->getData())
 				{
 					cout << "Al doilea numar a fost gasit in graf" << endl;
-					number2WasFound = true;
-					pointerToSecondNode = *actual;//salvam adresa nodului pentru operatii viitoare
+					targetWasFound = true;
+					pointerToTargetNode = *actual;//salvam adresa nodului pentru operatii viitoare
 
 				}
 
 			}
 
 			//dupa ce am gasit numerele facem legaturile
-			if (number1WasFound && number2WasFound)
+			if (sourceWasFound && targetWasFound)
 			{
 
-				//cream doua noduri noi care vor copia cheia nodurilor la care dorim sa inseram un arc
-				shared_ptr<Node> pointerToNextNode1 = make_shared<Node>();
-				shared_ptr<Node> pointerToNextNode2 = make_shared<Node>();
 
 				//--------------------------------------Nodul 1------------------------------------------------------------
-
-				shared_ptr<Node> temp1 = pointerToFirstNode;//retinem adresa primului nod
-
-				//iteram in lista inlantuita ale nodului la care dorim sa adaugam /stergem un link
-				while (pointerToFirstNode != nullptr)
+				//daca dorim sa facem legatura apelam functia de set next a nodului source
+				if (ConnectionType == true)
 				{
 
-					//daca dorim sa facem legatura
-					if (ConnectionType == true)
-					{
-
-						if (pointerToFirstNode->getNext() == nullptr)//daca nodul are adresa de next nullptr inseamna ca putem adauga un nod in coada
-						{
-
-							//setam valorile noului nod ca si cele ale nodului 2
-							pointerToNextNode1->setData(pointerToSecondNode->getData());//atribuim noului nod creat valoarea de la nodul 2
-
-							pointerToFirstNode->setNext(pointerToNextNode1);//punem adresa noului nod in next-ul listei capului de graf
-
-							cout << "Succes! Link creat pentru nodul 1 catre nodul 2" << endl;
-							break;
-
-						}
-
-					}
-					else//daca dorim sa stergem legatura
-					{
-
-						if (pointerToFirstNode->getNext()->getData() == pointerToSecondNode->getData())//daca nodul next are are cheia egala cu nodul 2 atunci putem efectua delinkuirea
-						{
-
-							pointerToFirstNode->setNext(pointerToFirstNode->getNext()->getNext());//punem adresa nodului actual->next->next in actual->next(ocolim nodul cu cheia din nodul 2)
-
-							cout << "Succes! Link sters pentru nodul 1 de la nodul 2" << endl;
-							break;
-
-						}
-
-					}
-
-
-					pointerToFirstNode = pointerToFirstNode->getNext();//setam adresa urmatoare in loop daca nu am intrat in "if"
+					pointerToSourceNode->setNext(pointerToTargetNode);//stabilim legaturile
+					pointerToTargetNode->setNext(pointerToSourceNode);//stabilim legaturile
 
 				}
+				else//daca dorim sa stergem legatura prima data trebuie sa cautam ca exista un link intre cele doua noduri, dupa care le vom sterge.
+				{
 
-				pointerToFirstNode = temp1;//restabilim adresa primului nod
+					if (NodeExistsInList(pointerToTargetNode, pointerToSourceNode->getNext()))
+					{
+
+
+
+					}
+				
+
+				}
+			
 
 				//----------------------------------------Nodul 2-----------------------------------------------------------
 
-				shared_ptr<Node> temp2 = pointerToSecondNode;//retinem adresa nodului 2
-
-				//iteram in lista inlantuita ale nodului la care dorim sa adaugam un link
-				while (pointerToSecondNode != nullptr)
-				{
-
-					if (ConnectionType == true)
-					{
-
-						if (pointerToSecondNode->getNext() == nullptr)
-						{
-
-							//setam valorile noului nod ca si cele ale nodului 1
-							pointerToNextNode2->setData(pointerToFirstNode->getData());//atribuim noului nod creat valoarea de la nodul 1
-
-							pointerToSecondNode->setNext(pointerToNextNode2);//punem adresa noului nod in next-ul listei capului de graf
-							cout << "Succes! Link creat pentru nodul 2 catre nodul 1" << endl;
-							break;
-
-						}
-
-					}
-					else
-					{
-
-						if (pointerToSecondNode->getNext()->getData() == pointerToFirstNode->getData())//daca nodul next are are cheia egala cu nodul 2 atunci putem efectua delinkuirea
-						{
-
-							pointerToSecondNode->setNext(pointerToSecondNode->getNext()->getNext());//punem adresa nodului actual->next->next in actual->next(ocolim nodul cu cheia din nodul 2)
-
-							cout << "Succes! Link sters pentru nodul 2 la nodul 1" << endl;
-							break;
-
-						}
-
-					}
-
-					pointerToSecondNode = pointerToSecondNode->getNext();//setam adresa urmatoare in loop daca nu am intrat in "if"
-
-				}
-
-				pointerToSecondNode = temp2;//restabilim adresa nodului doi
 
 			}
 
@@ -761,34 +670,25 @@ namespace structure_graf
 
 		}
 
-		if (!number1WasFound)
+		if (!sourceWasFound)
 		{
 
-			cout << "Numarul " << number1 << " nu exista in graf" << endl;
+			cout << "Numarul " << source << " nu exista in graf" << endl;
 			return;
 
 		}
 
-		if (!number2WasFound)
+		if (!targetWasFound)
 		{
 
-			cout << "Numarul " << number2 << " nu exista in graf" << endl;
+			cout << "Numarul " << target << " nu exista in graf" << endl;
 			return;
 
 		}
 
-	}
-
-
-
-	void DepthFirstSearch()
-	{
 
 	}
-	void BreadthFirstSearch()
-	{
 
-	}
 
 
 }

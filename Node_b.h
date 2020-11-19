@@ -12,20 +12,20 @@ namespace structure_graf
 	{
 	private:
 		int data;//cheie
-		shared_ptr<Node> next;//nodul urmator
+		list<shared_ptr<Node>> next;//lista cu nodurile urmatoare
 
 	public:
 		void setData(int);
 		int getData();
 
 		void setNext(shared_ptr<Node>);
-		shared_ptr<Node> getNext();
+		list<shared_ptr<Node>> getNext(); // functie care va returna lista nodurilor la care suntem linkuiti
 
 		//constructor pentru Node - initializam cheia la 0
 		Node()
 		{
 
-			this->next = nullptr;
+			this->next.clear();
 			this->data = 0;
 
 		}
@@ -51,10 +51,10 @@ namespace structure_graf
 	void Node::setNext(shared_ptr<Node> nextParam)
 	{
 
-		this->next = nextParam;
+		this->next.push_back(nextParam);
 
 	}
-	shared_ptr<Node> Node::getNext()
+	list<shared_ptr<Node>> Node::getNext()
 	{
 
 		return this->next;

@@ -576,12 +576,24 @@ namespace matrix_graf
 	}
 
 
-	void DepthFirstSearch()
+	void matrix_graf::Graf::DepthFirstSearch()
 	{
+		cout << "\n=======Cautare prin adancime=======" << endl;
+
+
+
 
 	}
-	void BreadthFirstSearch()
+
+	/*
+	functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue
+	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf)
+	folosim variabila "actual" pentru a itera in graf
+	*/
+	void matrix_graf::Graf::BreadthFirstSearch()
 	{
+
+		cout << "\n=======Cautare prin cuprindere=======" << endl;
 
 	}
 

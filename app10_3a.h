@@ -39,6 +39,9 @@ namespace matrix_graf
 			cout << "7.Afisare graf.\n";
 			cout << "8.Afisare matrice.\n";
 
+			cout << "9. Cautare prin adancime - DFS.\n";
+     		cout << "10.Cautare prin cuprindere - BFS.\n";
+
 			cout << "0.Exit.\n";
 
 			cout << "Optiunea dvs. : ";
@@ -82,6 +85,14 @@ namespace matrix_graf
 				break;
 			case 8:
 				graf->PrintMatrix();
+				cout << endl;
+				break;
+			case 9:
+				graf->DepthFirstSearch();
+				cout << endl;
+				break;
+			case 10:
+				graf->BreadthFirstSearch();
 				cout << endl;
 				break;
 
