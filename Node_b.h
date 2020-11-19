@@ -21,6 +21,9 @@ namespace structure_graf
 		void setNext(shared_ptr<Node>);
 		list<shared_ptr<Node>> getNext(); // functie care va returna lista nodurilor la care suntem linkuiti
 
+		void clearNextList();
+		void setNextList(list < shared_ptr<Node>>&);
+
 		//constructor pentru Node - initializam cheia la 0
 		Node()
 		{
@@ -47,17 +50,33 @@ namespace structure_graf
 
 	}
 
-
 	void Node::setNext(shared_ptr<Node> nextParam)
 	{
 
 		this->next.push_back(nextParam);
 
 	}
+
 	list<shared_ptr<Node>> Node::getNext()
 	{
 
 		return this->next;
+
+	}
+
+
+	void Node::clearNextList()
+	{
+
+		this->next.clear();
+
+	}
+
+
+	void Node::setNextList(list < shared_ptr<Node>> &ListParam)
+	{
+
+		this->next = ListParam;
 
 	}
 
