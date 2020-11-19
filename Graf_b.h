@@ -4,7 +4,6 @@
 namespace structure_graf
 {
 
-
 	class Graf
 	{
 
@@ -34,6 +33,7 @@ namespace structure_graf
 		void afisareNoduriGraf();
 
 		bool NodeExistsInList(shared_ptr<Node> , list < shared_ptr<Node>> );
+		
 		//------------------------------------------------------------
 
 
@@ -72,8 +72,28 @@ namespace structure_graf
 
 	}
 
+	//functie pentru stergerea unui nod dintr-o lista
+	void DeleteNodeInList(shared_ptr<Node>& deleteNode, list < shared_ptr<Node>>& li)
+	{
 
-	void print_queue(queue<shared_ptr<Node>> q)
+		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
+		{
+
+			if (*iterator == deleteNode)
+			{
+
+				cout << "Am sters nodul " << iterator->get()->getData() << " din lista." << endl;
+				li.erase(iterator);
+				return;
+			}
+
+		}
+
+	}
+
+
+	//functie pentru debug - nu va fi apelata in programul principal
+	void print_queue(queue<shared_ptr<Node>>& q)
 	{
 		cout << "Queue: ";
 
@@ -87,14 +107,15 @@ namespace structure_graf
 
 	}
 
-	void print_list(list<shared_ptr<Node>> li)
+	//functie pentru debug - nu va fi apelata in programul principal
+	void print_list(list<shared_ptr<Node>>& li)
 	{
 
 
 		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
 		{
 
-			cout << iterator->get()->getData() << "->";
+			cout << iterator->get()->getData()<< "->";
 
 		}
 
@@ -102,7 +123,24 @@ namespace structure_graf
 
 	}
 
-	// Performanta : O(n)
+	//functie pentru debug - nu va fi apelata in programul principal
+	void print_list_verbose(list<shared_ptr<Node>>& li)
+	{
+
+
+		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
+		{
+
+			cout << iterator->get()->getData()
+				<< " (" << *iterator << ") "
+				<< "->";
+
+		}
+
+		cout << endl;
+
+	}
+
 	void Graf::InsertNode()
 	{
 
@@ -164,7 +202,6 @@ namespace structure_graf
 
 
 	
-	//Performanta O(2n)
 	void Graf::SuprimNod()
 	{
 
@@ -180,14 +217,13 @@ namespace structure_graf
 		bool numberWasDeleted{ false };
 		int toDelete{};
 
-		shared_ptr<Node> DeletedNode = make_shared<Node>();
+		shared_ptr<Node> DeletedNode;
 
 		/*
 		retinem adresa nodului pe care dorim sa il stergem pentru a face modificarile in tot graful dupa stergere
-		daca stergem un nod care are arc existent catre alt nod, va trebui sa cautam acel nod cu cheia egala cu nodul pe care l-am sters.
+		daca stergem un nod care are arc existent catre alt nod, va trebui sa cautam acel nod pe care l-am sters in listele de next ale nodurilor din graf.
 		Ex: avem nodurile "2" si "6" in graf cu arc intre ele 2->6->null respectiv 6->2->null
 		Dorim sa stergem nodul 6, facem call de functia erase de nodul "6", dupa care trebuie sa cautam in tot graful daca exista un link catre "6" si sa il stergem si de acolo.
-		
 		*/
 
 		cout << "Introduceti numarul pe care doriti sa il stergeti: ";
@@ -204,10 +240,11 @@ namespace structure_graf
 				if (toDelete == actual->get()->getData())
 				{
 
-					DeletedNode = *actual;//dereferentiam iteratorul listei - retinem adresa nodului pe care il stergem
+					DeletedNode = *actual;//dereferentiem iteratorul actual si retinem adresa la nodul pe care doirm sa il stergem pentru a sterge si link-urile atasate acestui nod
 					cout << "Nodul: " << actual->get()->getData() << " va fi sters." << endl;
-
-					actual = NoduriGraf.erase(actual);//efectuam stergerea nodului din lista nodurilor grafului
+					NoduriGraf.erase(actual);//efectuam stergerea nodului din lista nodurilor grafului
+					
+					cout << "Success! Nod sters." << endl;
 
 					numberWasDeleted = true;
 					break;
@@ -215,6 +252,31 @@ namespace structure_graf
 				}
 
 			}
+
+			if (numberWasDeleted)
+			{
+
+				cout << "Stergem linkurile.." << endl;
+
+				//verificam in lista de noduri ale grafului daca avem link catre nodul sters
+				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+				{
+
+					auto paramlist = actual->get()->getNext(); //punem in variabila paramlist, lista nodului din iteratie
+					DeleteNodeInList(DeletedNode, paramlist);//apelam functia de stergere a nodului din lista
+
+					actual->get()->setNextList(paramlist);//setam lista nodului actual cu cea updatata din linia de mai sus.
+				}
+
+			}
+			else 
+			{
+
+				cout << "Numarul " << toDelete << " nu exista in graf" << endl;
+
+			}
+
+
 
 
 		}
@@ -225,12 +287,7 @@ namespace structure_graf
 
 		}
 
-		if (!numberWasDeleted)
-		{
-
-			cout << "Numarul " << toDelete << " nu exista in graf" << endl;
-
-		}
+	
 
 	}
 	
@@ -276,10 +333,9 @@ namespace structure_graf
 
 
 	
-	//Performanta : O(n * nr arce)
-	//functia de afisare a structurii grafului - afisam pe linie capul listei si arcele catre noduri
 	void Graf::PrintStructure()
 	{
+
 
 		if (this->GrafVid())
 		{
@@ -291,16 +347,46 @@ namespace structure_graf
 		try
 		{
 
+			bool optiune{ false };
 
-			//iteram in lista nodurilor grafului 
-			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+			cout << "Doriti sa afisati si adresele nodurilor? (1 - DA / 0 - NU)" << endl;
+			cin >> optiune;
+
+			cout <<"====================Structura graf===================="<< endl;
+			if (optiune)
 			{
 
-			
-				cout << actual->get()->getData() << "  ->";
-				print_list(actual->get()->getNext());
+				//iteram in lista nodurilor grafului 
+				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+				{
 
-				cout << endl;
+					auto tempList = actual->get()->getNext();
+
+					cout << actual->get()->getData()
+						<< " (" << *actual << ") "
+						<< "  ->";
+					print_list_verbose(tempList);
+
+					cout << endl;
+
+				}
+
+			}
+			else
+			{
+
+				//iteram in lista nodurilor grafului 
+				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+				{
+
+					auto tempList = actual->get()->getNext();
+
+					cout << actual->get()->getData()<< "  ->";
+					print_list(tempList);
+
+					cout << endl;
+
+				}
 
 			}
 
@@ -325,7 +411,6 @@ namespace structure_graf
 		try
 		{
 
-			//int newNumber{};
 			bool numberAlreadyExists{ false };
 
 			shared_ptr<Node> newNode = make_shared<Node>();//alocam memorie pentru un nou nod al grafului
@@ -379,7 +464,7 @@ namespace structure_graf
 	}
 
 
-
+	//verificam daca un nod exista un queue-ul clasei graf
 	bool structure_graf::Graf::NodeExistsInQueue(shared_ptr<Node> actual)
 	{
 		queue<shared_ptr<Node>> tempqueue = this->que;
@@ -401,6 +486,7 @@ namespace structure_graf
 
 	}
 
+	//verificam daca un nod exista un lista rezultata din cautare clasei graf
 	bool  structure_graf::Graf::NodeExistsInNodesSearchedInGraf(shared_ptr<Node> actual)
 	{
 		
@@ -420,6 +506,7 @@ namespace structure_graf
 
 	}
 
+	
 	bool  structure_graf::Graf::NodeExistsInList(shared_ptr<Node> actual , list<shared_ptr<Node>> li)
 	{
 
@@ -566,6 +653,7 @@ namespace structure_graf
 
 					pointerToSourceNode->setNext(pointerToTargetNode);//stabilim legaturile source
 					pointerToTargetNode->setNext(pointerToSourceNode);//stabilim legaturile target
+					cout << "Succes, link creat!" << endl;
 
 				}
 				else//daca dorim sa stergem legatura prima data trebuie sa cautam ca exista un link intre cele doua noduri, dupa care le vom sterge.
@@ -681,7 +769,6 @@ namespace structure_graf
 		try
 		{
 
-
 			//ne asiguram prima data ca numerele la care dorim sa introducem un arc exista in graf
 			//iteram in lista pana cand gasim nodul la care dorim sa ii adaugam un arc
 			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
@@ -699,6 +786,7 @@ namespace structure_graf
 
 				if (target == actual->get()->getData())
 				{
+
 					cout << "Al doilea numar a fost gasit in graf" << endl;
 					targetWasFound = true;
 					pointerToTargetNode = *actual;//salvam adresa nodului pentru operatii viitoare
@@ -718,6 +806,7 @@ namespace structure_graf
 
 					pointerToSourceNode->setNext(pointerToTargetNode);//stabilim legaturile source
 					pointerToTargetNode->setNext(pointerToSourceNode);//stabilim legaturile target
+					cout << "Succes, link creat!" << endl;
 
 				}
 				else//daca dorim sa stergem legatura prima data trebuie sa cautam ca exista un link intre cele doua noduri, dupa care le vom sterge.
@@ -773,8 +862,6 @@ namespace structure_graf
 
 					}
 					
-					
-
 				}
 
 			}
@@ -808,3 +895,5 @@ namespace structure_graf
 	}
 
 }
+
+
