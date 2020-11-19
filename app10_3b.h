@@ -92,7 +92,7 @@ namespace structure_graf
 				cout << endl;
 				break;
 			case 9:
-			//	graf->BreadthFirstSearch();
+				graf->BreadthFirstSearch();
 				cout << endl;
 				break;
 

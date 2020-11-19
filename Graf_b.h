@@ -28,6 +28,7 @@ namespace structure_graf
 
 		bool NodeExistsInQueue(shared_ptr<Node>);
 		bool NodeExistsInNodesSearchedInGraf(shared_ptr<Node>);
+		void PrintNodesSearchedInGraf();
 		
 		void PrintStructure();
 		void afisareNoduriGraf();
@@ -506,6 +507,20 @@ namespace structure_graf
 
 	}
 
+
+	//verificam daca un nod exista un lista rezultata din cautare clasei graf
+	void  structure_graf::Graf::PrintNodesSearchedInGraf()
+	{
+
+		for (auto iterator = this->NodesSearchedInGraf.begin(); iterator != this->NodesSearchedInGraf.end(); ++iterator)
+		{
+
+			cout << iterator->get()->getData()<<"  ";
+
+		}
+
+
+	}
 	
 	bool  structure_graf::Graf::NodeExistsInList(shared_ptr<Node> actual , list<shared_ptr<Node>> li)
 	{
@@ -536,23 +551,20 @@ namespace structure_graf
 
 		cout << "\n=======Cautare prin cuprindere=======" << endl;
 
+		this->NodesSearchedInGraf.clear();
 		shared_ptr<Node> actual = nullptr;
 		
 		que.push(*(this->NoduriGraf.begin()));//punem primul nod  in queue
 
 		list<shared_ptr<Node>> ConnectedNodesToActual{};
 
-		
-		
 		while (!que.empty())//atata timp cat in queue avem noduri vom face traversarea grafului
 		{
 
 			actual = que.front();//punem in actual primul nod din queue
 			NodesSearchedInGraf.push_back(actual);//punem nodul la care am ajuns intr-o lista pe care o vom afisa la sfarsit
 
-		
 			ConnectedNodesToActual = actual->getNext();
-			print_list(ConnectedNodesToActual);
 			
 			//verificam ca nodurile pe care le-am gasit adiacente la actual sa nu fie in lista sau queue de noduri deja parcurse.
 			for (auto iterator = ConnectedNodesToActual.begin(); iterator != ConnectedNodesToActual.end(); ++iterator)
@@ -576,10 +588,8 @@ namespace structure_graf
 			que.pop();//stergem primul nod
 
 		}
-		
 
-		
-	   
+		PrintNodesSearchedInGraf();
 	
 	}
 
