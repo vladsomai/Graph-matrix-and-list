@@ -37,7 +37,7 @@ namespace structure_graf
 		//------------------------------------------------------------
 
 		void clearSearchedList(){NodesSearchedInGraf.clear();}
-		shared_ptr<Node> getFirstNode() { return this->NoduriGraf.front(); }
+		auto getFirstNode() { return this->NoduriGraf.begin(); }
 		//constructor - initializare obiect graf - InitGraf()
 		Graf()
 		{
@@ -604,11 +604,11 @@ namespace structure_graf
 
 	/*
 	functia de cautare prin adancime implementata folosind recursivitate.
-	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor.
+	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor, incrementand iteratorul din meniul clasei
 	folosim variabila "actual" pentru a itera in graf
 
 	verificam daca nodul la care am ajuns are noduri de next pe care le-am vizitat deja apeland functia "NodeExistsInList", daca nu avem nodul in lista il punem(marcam ca si vizitat)
-	daca nodul este deja vizitat implicit se foloseste procedeul de back-tracking, iesim din functie si revenim cu pointerul de pe stack la functia care a ramas intrerupta in for
+	daca nodul este deja vizitat implicit se foloseste procedeul de back-tracking, iesim din functie si revenim cu pointerul de pe stack unde functia care a ramas intrerupta in for
 
 	apelam functia de cautare in adancime de fiecare node din lista de next.
 	*/

@@ -23,7 +23,7 @@ namespace structure_graf
 	{
 
 		int optiune = 0;
-
+		auto it = graf->getFirstNode();
 
 		do
 		{
@@ -89,7 +89,8 @@ namespace structure_graf
 				break;
 			case 8:
 				graf->clearSearchedList();
-			    graf->DepthFirstSearch(graf->getFirstNode());
+				advance(it, 3);//setam al catelea element din lista sa fie luat ca si parametru
+			    graf->DepthFirstSearch(*it);
 				graf->PrintNodesSearchedInGraf();
 				cout << endl;
 				break;
