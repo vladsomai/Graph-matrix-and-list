@@ -88,10 +88,13 @@ namespace structure_graf
 				cout << endl;
 				break;
 			case 8:
-			//	graf->DepthFirstSearch();
+				graf->clearSearchedList();
+			    graf->DepthFirstSearch(graf->getFirstNode());
+				graf->PrintNodesSearchedInGraf();
 				cout << endl;
 				break;
 			case 9:
+				graf->clearSearchedList();
 				graf->BreadthFirstSearch();
 				cout << endl;
 				break;

@@ -12,7 +12,6 @@ namespace structure_graf
 		queue< shared_ptr<Node> > que{};//queue pentru implementarea functiei de cautare prin cuprindere
 		list < shared_ptr<Node> >NodesSearchedInGraf{};//lista in care vom insera nodurile parcurse de BFS, dupa care o vom afisa in ordinea in care au fost inserate noduri.
 
-
 	public:
         //------------------------------------------------------------
 		bool GrafVid();
@@ -23,7 +22,7 @@ namespace structure_graf
 		void InsertArc(bool);
 		void InsertArcParam(bool, int, int);
 
-		void DepthFirstSearch();
+		void DepthFirstSearch(shared_ptr<Node>);
 		void BreadthFirstSearch();
 
 		bool NodeExistsInQueue(shared_ptr<Node>);
@@ -37,21 +36,22 @@ namespace structure_graf
 		
 		//------------------------------------------------------------
 
-
+		void clearSearchedList(){NodesSearchedInGraf.clear();}
+		shared_ptr<Node> getFirstNode() { return this->NoduriGraf.front(); }
 		//constructor - initializare obiect graf - InitGraf()
 		Graf()
 		{
 
 			//cream lista fara noduri
 			NoduriGraf.clear();
-
+			
+			NodesSearchedInGraf.clear();
+		
 		}
 
 		~Graf() = default;
 
 	};
-
-
 
 	bool Graf::GrafVid()
 	{
@@ -541,30 +541,36 @@ namespace structure_graf
 
 	}
 
+
+
 	/*
 	functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue
-	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf)
+	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor.
 	folosim variabila "actual" pentru a itera in graf
+
+
+	Punem in queue nodurile adiacente a nodului actual(acestea trebuie sa indeplineasca conditia de a nu fi deja in queue sau in lista cu noduri pe care le-am gasit, dupa care iteram in queue atata timp cat nu este gol
 	*/
 	void structure_graf::Graf::BreadthFirstSearch()
 	{
 
 		cout << "\n=======Cautare prin cuprindere=======" << endl;
 
-		this->NodesSearchedInGraf.clear();
+		this->NodesSearchedInGraf.clear();//vom da clear la lista in care punem nodurile gasite
 		shared_ptr<Node> actual = nullptr;
 		
-		que.push(*(this->NoduriGraf.begin()));//punem primul nod  in queue
+		que.push(*(this->NoduriGraf.begin()));//punem primul nod  in queue de la care dorim sa incepem, poate fi oricare nod din graf.
 
-		list<shared_ptr<Node>> ConnectedNodesToActual{};
+		list<shared_ptr<Node>> ConnectedNodesToActual{}; // cream un pointer catre lista nodurilor la care este conectat actual (actual->getNext())
 
 		while (!que.empty())//atata timp cat in queue avem noduri vom face traversarea grafului
 		{
 
 			actual = que.front();//punem in actual primul nod din queue
-			NodesSearchedInGraf.push_back(actual);//punem nodul la care am ajuns intr-o lista pe care o vom afisa la sfarsit
+			NodesSearchedInGraf.push_back(actual);//punem nodul la care am ajuns intr-o lista pe care o vom afisa la sfarsit ul functiei.
+			//Putem de asemenea sa facem afisarea nodului la care am ajuns aici, dar avem nevoie de lista "NodeSearchedInGraf" pentru a tine evidenta nodurilor deja gasite.
 
-			ConnectedNodesToActual = actual->getNext();
+			ConnectedNodesToActual = actual->getNext();//setam connected nodes
 			
 			//verificam ca nodurile pe care le-am gasit adiacente la actual sa nu fie in lista sau queue de noduri deja parcurse.
 			for (auto iterator = ConnectedNodesToActual.begin(); iterator != ConnectedNodesToActual.end(); ++iterator)
@@ -573,28 +579,60 @@ namespace structure_graf
 				if (NodeExistsInQueue(*iterator) || NodeExistsInNodesSearchedInGraf(*iterator))
 				{
 
-					continue;
+					continue;//atata timp nodul la care am ajuns in iteratie exista in queue sau in lista de noduri cautate, trecem la urmatorul
 
 				}
 				else
 				{
 
+					//cand ajungem la un nod care nu exista in queue si nici in lista de nodrui cautate inseamna ca trebuie sa il traversam, deci il punem in queue
 					que.push(*iterator);//adaugam nodul in queue daca nu a fost deja 
 
 				}
 
 			}
 
-			que.pop();//stergem primul nod
+			que.pop();//dupa ce am verificat nodurile de next ale lui actual, putem sa il stergem din queue si trecem la urmatorul ciclu
 
 		}
 
-		PrintNodesSearchedInGraf();
+		PrintNodesSearchedInGraf(); //afisam lista nodurilor gasita in ciclul de mai sus, in ordinea in care au fost gasite.
 	
 	}
 
-	void structure_graf::Graf::DepthFirstSearch()
+
+
+	/*
+	functia de cautare prin adancime implementata folosind recursivitate.
+	incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor.
+	folosim variabila "actual" pentru a itera in graf
+
+	verificam daca nodul la care am ajuns are noduri de next pe care le-am vizitat deja apeland functia "NodeExistsInList", daca nu avem nodul in lista il punem(marcam ca si vizitat)
+	daca nodul este deja vizitat implicit se foloseste procedeul de back-tracking, iesim din functie si revenim cu pointerul de pe stack la functia care a ramas intrerupta in for
+
+	apelam functia de cautare in adancime de fiecare node din lista de next.
+	*/
+	void structure_graf::Graf::DepthFirstSearch(shared_ptr<Node> actual)
 	{
+
+
+		if (NodeExistsInList(actual, NodesSearchedInGraf))
+		{
+			return;
+		}
+		else
+		{
+			NodesSearchedInGraf.push_back(actual);
+		}
+
+		list<shared_ptr<Node>> ConnectedNodesToActual = actual->getNext();
+		for (auto iterator : ConnectedNodesToActual)
+		{
+
+			DepthFirstSearch(iterator);
+
+		}
+
 
 	}
 
