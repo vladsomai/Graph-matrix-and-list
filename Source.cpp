@@ -16,8 +16,8 @@ Se vor utiliza reprezentările şi operatorii de la problemele 10.1 respectv 10.
 
 
 
-Folosindu-ne de implementarea de la punctele 1 si 2 vom crea 1 graf pentru matrix graf si unul pentru structure graf
-graful v-a fi predefinit la rulare astfel economisind timp pentru verificari si schimbari.
+Folosindu-ne de implementarea de la punctele 1 si 2 vom crea 1 graf pentru matrix graf si unul pentru structure graf.
+Graful v-a fi predefinit la rulare astfel economisind timp pentru verificari si schimbari.
 
 Afisarea structurii si matricei grafului se poate face din meniul fiecarui graf
 
@@ -80,7 +80,6 @@ void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::
 			break;
 		};
 
-		system("pause");
 	} while (optiune != 0);
 
 }
