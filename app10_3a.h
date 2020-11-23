@@ -20,7 +20,7 @@ namespace matrix_graf
 	{
 
 		int optiune = 0;
-
+		auto it = graf->getFirstNode();
 
 		do
 		{
@@ -88,10 +88,16 @@ namespace matrix_graf
 				cout << endl;
 				break;
 			case 9:
-				graf->DepthFirstSearch();
+				cout << "\n=======Cautare prin adancime=======" << endl;
+				graf->clearSearchedList();
+				advance(it, 5);//setam al catelea element din lista sa fie luat ca si parametru
+				graf->DepthFirstSearch(*it);
+				cout << endl;
+				graf->PrintNodesSearchedInGraf();
 				cout << endl;
 				break;
 			case 10:
+				cout << "\n=======Cautare prin cuprindere=======" << endl;
 				graf->BreadthFirstSearch();
 				cout << endl;
 				break;

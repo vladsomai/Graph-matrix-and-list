@@ -625,7 +625,7 @@ namespace structure_graf
 		}
 		else
 		{
-			//daca nu este vizitat, il adaugam in lista cu noduriloe gasite.
+			//daca nu este vizitat, il adaugam in lista cu nodurile gasite.
 			NodesSearchedInGraf.push_back(actual);
 		
 		}
