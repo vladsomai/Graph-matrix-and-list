@@ -2,11 +2,8 @@
 #include "Graf_b.h"
 
 
-
-
 namespace structure_graf
 {
-
 
 	void menu(shared_ptr<Graf>);
 
@@ -93,6 +90,7 @@ namespace structure_graf
 			    graf->DepthFirstSearch(*it);
 				graf->PrintNodesSearchedInGraf();
 				cout << endl;
+				it = graf->getFirstNode();//resetam iteratorul la primul nod dupa ce am terminat executia
 				break;
 			case 9:
 				graf->clearSearchedList();

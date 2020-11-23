@@ -26,7 +26,8 @@ Facem implementarea cautarii prin adancime si cuprindere in aceeasi solutie.
 
 */
 
-void menu(shared_ptr<matrix_graf::Graf> , shared_ptr<structure_graf::Graf>);
+
+void menu(shared_ptr<matrix_graf::Graf>, shared_ptr<structure_graf::Graf>);
 shared_ptr<matrix_graf::Graf> CreateMatrixGraf();
 shared_ptr<structure_graf::Graf> CreateStructureGraf();
 
@@ -37,7 +38,6 @@ int main()
 	menu(CreateMatrixGraf(), CreateStructureGraf());
 
 }
-
 
 
 void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::Graf> structureGraf)
@@ -135,3 +135,4 @@ shared_ptr<structure_graf::Graf> CreateStructureGraf()
 	return structure_grafExample;
 
 }
+

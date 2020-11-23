@@ -9,7 +9,6 @@ using namespace std;
 namespace matrix_graf
 {
 
-
 	class Node
 	{
 	private:
@@ -30,12 +29,14 @@ namespace matrix_graf
 
 	};
 
+
 	int Node::getData()
 	{
 
 		return this->data;
 
 	}
+
 
 	void Node::setData(int newData)
 	{

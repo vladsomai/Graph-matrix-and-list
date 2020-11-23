@@ -33,7 +33,6 @@ namespace structure_graf
 
 		}
 
-
 	};
 
 	int Node::getData()
@@ -43,6 +42,7 @@ namespace structure_graf
 
 	}
 
+
 	void Node::setData(int newData)
 	{
 
@@ -50,12 +50,14 @@ namespace structure_graf
 
 	}
 
+
 	void Node::setNext(shared_ptr<Node> nextParam)
 	{
 
 		this->next.push_back(nextParam);
 
 	}
+
 
 	list<shared_ptr<Node>> Node::getNext()
 	{

@@ -23,12 +23,12 @@ namespace structure_graf
 		void InsertArc(bool);
 		void InsertArcParam(bool, int, int);
 
-		void DepthFirstSearch(shared_ptr<Node>);
+		void DepthFirstSearch(shared_ptr<Node>&);
 		void BreadthFirstSearch();
 
-		bool NodeExistsInQueue(shared_ptr<Node>);
-		bool NodeExistsInNodesSearchedInGraf(shared_ptr<Node>);
-		bool NodeExistsInList(shared_ptr<Node>, list < shared_ptr<Node>>);
+		bool NodeExistsInQueue(shared_ptr<Node>&);
+		bool NodeExistsInNodesSearchedInGraf(shared_ptr<Node>&);
+		bool NodeExistsInList(shared_ptr<Node>&, list < shared_ptr<Node>>&);
 
 		void PrintStructure();
 		void afisareNoduriGraf();
@@ -73,7 +73,7 @@ namespace structure_graf
 
 	}
 
-	
+
 	void DeleteNodeInList(shared_ptr<Node>& deleteNode, list < shared_ptr<Node>>& li)
 	{
 
@@ -107,6 +107,7 @@ namespace structure_graf
 
 	}
 
+
 	void print_list(list<shared_ptr<Node>>& li)
 	{
 
@@ -121,6 +122,7 @@ namespace structure_graf
 		cout << endl;
 
 	}
+
 
 	void print_list_verbose(list<shared_ptr<Node>>& li)
 	{
@@ -140,7 +142,6 @@ namespace structure_graf
 	}
 
 
-	
 	void Graf::SuprimNod()
 	{
 
@@ -229,8 +230,7 @@ namespace structure_graf
 		}	
 
 	}
-	
-	
+
 
 	//functia de afisare noduri graf, iteram in lista care retine adresa nodurilor aici afisam doar nodurile prezente in graf, nu si structura grafului
 	void Graf::afisareNoduriGraf()
@@ -271,7 +271,6 @@ namespace structure_graf
 	}
 
 
-	
 	void Graf::PrintStructure()
 	{
 
@@ -343,7 +342,6 @@ namespace structure_graf
 		}
 
 	}
-
 
 
 	void Graf::InsertNode()
@@ -466,7 +464,7 @@ namespace structure_graf
 
 
 	//verificam daca un nod exista un queue-ul clasei graf
-	bool structure_graf::Graf::NodeExistsInQueue(shared_ptr<Node> actual)
+	bool structure_graf::Graf::NodeExistsInQueue(shared_ptr<Node>& actual)
 	{
 		queue<shared_ptr<Node>> tempqueue = this->que;
 
@@ -487,8 +485,9 @@ namespace structure_graf
 
 	}
 
+
 	//verificam daca un nod exista in lista rezultata din cautarea nodurilor 
-	bool  structure_graf::Graf::NodeExistsInNodesSearchedInGraf(shared_ptr<Node> actual)
+	bool  structure_graf::Graf::NodeExistsInNodesSearchedInGraf(shared_ptr<Node>& actual)
 	{
 		
 		for (auto iterator = this->NodesSearchedInGraf.begin(); iterator != this->NodesSearchedInGraf.end(); ++iterator)
@@ -520,8 +519,9 @@ namespace structure_graf
 
 	}
 	
+
 	//verificam daca un nod exista in lista
-	bool  structure_graf::Graf::NodeExistsInList(shared_ptr<Node> actual , list<shared_ptr<Node>> li)
+	bool  structure_graf::Graf::NodeExistsInList(shared_ptr<Node>& actual , list<shared_ptr<Node>>& li)
 	{
 
 		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
@@ -541,12 +541,10 @@ namespace structure_graf
 	}
 
 
-
 	/*
 	-functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue;
 	-incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor;
 	-folosim variabila "actual" pentru a itera in graf;
-
 
 	Punem in queue nodurile adiacente a nodului actual(acestea trebuie sa indeplineasca conditia de a nu fi deja 
 	in queue sau in lista cu noduri pe care le-am gasit,
@@ -602,7 +600,6 @@ namespace structure_graf
 	}
 
 
-
 	/*
 	-functia de cautare prin adancime implementata folosind recursivitate;
 	-incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor, incrementand iteratorul din meniul clasei;
@@ -613,32 +610,33 @@ namespace structure_graf
 
 	-apelam functia de cautare in adancime de fiecare node din lista de next;
 	*/
-	void structure_graf::Graf::DepthFirstSearch(shared_ptr<Node> actual)
+	void structure_graf::Graf::DepthFirstSearch(shared_ptr<Node>& actual)
 	{
 
-		//verificam ca nodul sa nu fie deja vizitat
-		if (NodeExistsInList(actual, NodesSearchedInGraf))
-		{
+			//verificam ca nodul sa nu fie deja vizitat
+			if (NodeExistsInList(actual, NodesSearchedInGraf))
+			{
 
-			return;
+				return;
+
+			}
+			else
+			{
+				//daca nu este vizitat, il adaugam in lista cu nodurile gasite.
+				NodesSearchedInGraf.push_back(actual);
+
+			}
+
+			list<shared_ptr<Node>> ConnectedNodesToActual = actual->getNext();//lista care va contine toate nodurile adiacente lui actual
+			for (auto iterator : ConnectedNodesToActual)
+			{
+
+				DepthFirstSearch(iterator);//apelam functia de cautare pentru fiecare nod din lista de adiacenta
+
+			}
+
 		
-		}
-		else
-		{
-			//daca nu este vizitat, il adaugam in lista cu nodurile gasite.
-			NodesSearchedInGraf.push_back(actual);
 		
-		}
-
-		list<shared_ptr<Node>> ConnectedNodesToActual = actual->getNext();//lista care va contine toate nodurile adiacente lui actual
-		for (auto iterator : ConnectedNodesToActual)
-		{
-
-			DepthFirstSearch(iterator);//apelam functia de cautare pentru fiecare nod din lista de adiacenta
-
-		}
-
-
 	}
 
 
@@ -945,6 +943,6 @@ namespace structure_graf
 
 	}
 
-}
 
+}
 

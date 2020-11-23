@@ -94,6 +94,7 @@ namespace matrix_graf
 				graf->DepthFirstSearch(*it);
 				cout << endl;
 				graf->PrintNodesSearchedInGraf();
+				it = graf->getFirstNode();//resetam iteratorul la primul nod dupa ce am terminat executia
 				cout << endl;
 				break;
 			case 10:
