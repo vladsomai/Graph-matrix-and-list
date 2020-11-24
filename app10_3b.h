@@ -4,10 +4,10 @@
 
 namespace structure_graf
 {
-
+	//declaram functia de meniu
 	void menu(shared_ptr<Graf>);
 
-
+	//functie principala care va chema meniul
 	void StructureGraf_main(shared_ptr<Graf> structure_graf)
 	{
 
@@ -15,7 +15,7 @@ namespace structure_graf
 
 	}
 
-
+	//definim functia meniu al grafului bazat pe structuri de liste
 	void menu(shared_ptr<Graf> graf)
 	{
 
@@ -85,6 +85,7 @@ namespace structure_graf
 				cout << endl;
 				break;
 			case 8:
+				cout << "\n=======Cautare prin adancime=======" << endl;
 				graf->clearSearchedList();
 				advance(it, 3);//setam al catelea element din lista sa fie luat ca si parametru
 			    graf->DepthFirstSearch(*it);
@@ -93,6 +94,7 @@ namespace structure_graf
 				it = graf->getFirstNode();//resetam iteratorul la primul nod dupa ce am terminat executia
 				break;
 			case 9:
+				cout << "\n=======Cautare prin cuprindere=======" << endl;
 				graf->clearSearchedList();
 				graf->BreadthFirstSearch();
 				cout << endl;

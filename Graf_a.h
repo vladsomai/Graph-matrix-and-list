@@ -7,12 +7,12 @@ namespace matrix_graf
 	{
 
 	private:
-		list <shared_ptr<Node>> NoduriGraf;//vector care v-a retine adresele fiecarui nod din graf
-		list < shared_ptr<Node> >NodesSearchedInGraf{};//lista in care vom insera nodurile parcurse de BFS & DFS, dupa care o vom afisa in ordinea in care au fost inserate noduri.
-		queue< shared_ptr<Node> > que{};//queue pentru implementarea functiei de cautare prin cuprindere
+		list <shared_ptr<Node>> NoduriGraf;//vector care v-a retine adresele fiecarui nod din graf.
+		list < shared_ptr<Node> >NodesSearchedInGraf{};//lista in care vom insera nodurile parcurse de BFS & DFS, dupa care o vom afisa in ordinea in care au fost inserate nodurile.
+		queue< shared_ptr<Node> > que{};//queue(coada) pentru implementarea functiei de cautare prin cuprindere.
 
 		static const int  MAX = 7;
-		bool matrix[MAX][MAX];//matricea de adiacenta a grafului
+		bool matrix[MAX][MAX];//matricea de adiacenta a grafului, se poate modifica variabila MAX pentru alte marimi ale grafului
 
 	public:
 		/*functiile grafului*/
@@ -74,7 +74,8 @@ namespace matrix_graf
 		~Graf() = default;
 	};
 
-
+	
+	//functie de afisare a unei liste parametru
 	void print_list(list<shared_ptr<Node>>& li)
 	{
 
@@ -91,6 +92,7 @@ namespace matrix_graf
 	}
 
 
+	//functie de afisare a unei liste parametru cu adresele fiecarui nod din componenta listei
 	void print_list_verbose(list<shared_ptr<Node>>& li)
 	{
 
@@ -109,7 +111,7 @@ namespace matrix_graf
 	}
 
 
-	//verificam daca un nod exista un queue-ul clasei graf
+	//functia de verificare daca un nod exista in coada
 	bool matrix_graf::Graf::NodeExistsInQueue(shared_ptr<Node>& actual)
 	{
 		queue<shared_ptr<Node>> tempqueue = this->que;
@@ -153,6 +155,7 @@ namespace matrix_graf
 	}
 
 
+	//functie de afisare a matricei de adiacenta
 	void Graf::PrintMatrix()
 	{
 
@@ -201,6 +204,7 @@ namespace matrix_graf
 	}
 
 
+	//functie verificare graf vid
 	bool Graf::GrafVid()
 	{
 
@@ -225,7 +229,7 @@ namespace matrix_graf
 	bool Graf::GrafPlin()
 	{
 
-		//verificam marimea vectorului
+		//verificam marimea vectorului, daca este mai mare decat numarul maxim de noduri ale matricei returnam true
 		if (NoduriGraf.size() >= MAX)
 		{
 
@@ -243,6 +247,7 @@ namespace matrix_graf
 	}
 
 
+	//functie de inserare un nod in graf
 	void Graf::InsertNode()
 	{
 
@@ -261,17 +266,18 @@ namespace matrix_graf
 			bool numberAlreadyExists{ false };
 
 			shared_ptr<Node> newNode = make_shared<Node>();//alocam memorie pentru un nou nod al grafului
+			//daca nu putem aloca memorie - functia make_share va arunca un obiect de tipul bad_alloc pe care il tratam in blocul catch
 
 			cout << "\nIntroduceti un numar in noul nod: ";	cin >> newNumber;
 
 			newNode->setData(newNumber);
 
 
-			//dorim sa ne asiguram ca cheia introdusa nu exista deja in graf
+			//dorim sa ne asiguram ca cheia introdusa nu exista deja in graf, iteram in lista de noduri din graf
 			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 			{
 
-				//insemana ca avem deja numarul in list, deci nu putem face insertia
+				//daca numarul la care am ajuns este egal cu noul numar introdus, insemana ca avem deja numarul in list, deci nu putem face insertia
 				if (actual->get()->getData() == newNode->getData())
 				{
 
@@ -310,9 +316,11 @@ namespace matrix_graf
 	}
 
 
+	//functia de inserare arc - va avea ca si parametru true sau false si in functie de acest parametru vom adauga link sau vom sterge link
 	void Graf::InsertArc(bool ConectionType)
 	{
 		 
+		//verificam pentru graf gol
 		if (this->GrafVid())
 		{
 
@@ -321,70 +329,62 @@ namespace matrix_graf
 		}
 
 		int number1{}, number2{};
+		
+		//variabile folosite pentru a inregistra daca am gasit numerele la care dorim sa adaugam un arc
 		int number1WasFound{ false };
 		int number2WasFound{ false };
-		cout << "Introduceti doua noduri pe care doriti sa le conectati / deconectati" << endl;
 
+		cout << "Introduceti doua noduri pe care doriti sa le conectati / deconectati" << endl;
 		cout << "Primul numar: "; cin >> number1;
 		cout << "Al doilea numar: "; cin >> number2;
 
-		try
+	
+		//cautam primul numar in graf pe linie.
+		size_t i = 0, j = 0;//index-urile folosite pentru introducerea linkului in matrice
+
+		//iteram in lista de nodrui pana ajungem la nodul la care dorim sa stergem / adaugam un arc
+		//cautam primul numar pe linie
+		for (auto actual_i = NoduriGraf.begin(); actual_i != NoduriGraf.end(); ++actual_i)
 		{
 
-			//cautam primul numar in graf pe linie.
-			size_t i = 0, j = 0;//index-urile folosite pentru introducerea linkului in matrice
-			for (auto actual_i = NoduriGraf.begin(); actual_i != NoduriGraf.end(); ++actual_i)
+			j = 0;//resetam indexul j al coloanei de fiecare data cand ajungem la o noua linie
+
+			if (number1 == actual_i->get()->getData())
 			{
 
-				j = 0;
-				if (number1 == actual_i->get()->getData())
+				cout << "Primul nod introdus : " << actual_i->get()->getData() << " a fost gasit in graf." << endl;
+				number1WasFound = true;
+
+				//cautam al doilea numar in graf pe coloana.
+				for (auto actual_j = NoduriGraf.begin(); actual_j != NoduriGraf.end(); ++actual_j)
 				{
 
-					cout << "Primul nod introdus : " << actual_i->get()->getData() << " a fost gasit in graf." << endl;
-					number1WasFound = true;
-
-					//cautam al doilea numar in graf pe coloana.
-					for (auto actual_j = NoduriGraf.begin(); actual_j != NoduriGraf.end(); ++actual_j)
+					if (number2 == actual_j->get()->getData())
 					{
 
-						if (number2 == actual_j->get()->getData())
-						{
+						cout << "Al doilea nod introdus : " << actual_j->get()->getData() << " a fost gasit in graf." << endl;
+						number2WasFound = true;
 
-							cout << "Al doilea nod introdus : " << actual_j->get()->getData() << " a fost gasit in graf." << endl;
-							number2WasFound = true;
+						if (ConectionType)
+							cout << "Vom efectua linkuirea.." << endl;
+						else
+							cout << "Vom efectua delinkuriea" << endl;
 
-							if (ConectionType)
-								cout << "Vom efectua linkuirea.." << endl;
-							else
-								cout << "Vom efectua delinkuriea" << endl;
+						//setam pe true / false linia si coloana cu numerele pe care dorim sa le linkuim.
+						matrix[i][j] = ConectionType;
+						matrix[j][i] = ConectionType;
 
-							cout << "i: " << i << endl;
-							cout << "j: " << j << endl;
-
-							//setam pe true / false linia si coloana cu numerele pe care dorim sa le linkuim.
-							matrix[i][j] = ConectionType;
-							matrix[j][i] = ConectionType;
-
-							break;
-
-						}
-
-						j++;
+						return; //iesim din functie daca am sters / adaugat link 
 
 					}
 
-				}
+					j++;
 
-				i++;
+				}
 
 			}
 
-		}
-		catch (exception e)
-		{
-
-			cout << e.what() << endl;
-			return;
+			i++;
 
 		}
 
@@ -407,6 +407,7 @@ namespace matrix_graf
 	}
 
 
+	//functia de suprimare nod din lista, vom trata si de-linkuirea nodurilor legate la nodul sters si vom pregati matricea pentru adaugarea unui nou nod.
 	void Graf::SuprimNod()
 	{
 
@@ -418,65 +419,104 @@ namespace matrix_graf
 			return;
 
 		}
-		shared_ptr<Node> DeletedNode = nullptr;
+
+		shared_ptr<Node> DeletedNode = nullptr;//pointer la nodul pe care il vom sterge din lista de noduriGraf
 		bool numberWasDeleted{ false };
 		int toDelete = 0;
-		int DeletedNodeIndex = 0;
+		int DeletedNodeIndex = 0;//variabila pentru a retine pozitia nodului sters din matrice
 
 		cout << "Introduceti numarul pe care doriti sa il stergeti: ";
 		cin >> toDelete;
 
-		try
+
+		//iteram in noduri graf pentru a verifica daca exista nodul pe care dorim sa il stergem
+		for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 		{
 
-			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+			if (toDelete == actual->get()->getData())
 			{
 
-				if (toDelete == actual->get()->getData())
-				{
+				cout << "Nodul " << actual->get()->getData() << " va fi sters." << endl;
+			    DeletedNodeIndex = nodePosition(*actual, NoduriGraf);//inregistram index-ul nodului pe care il stergem pentru a sterge si linia si coloana din matrice
 
-					cout << "Nodul " << actual->get()->getData() << " va fi sters." << endl;
-					DeletedNodeIndex = nodePosition(*actual, NoduriGraf);//inregistram index-ul nodului pe care il stergem pentru a sterge si linia si coloana din matrice
+				NoduriGraf.erase(actual);//efectuam stergerea nodului
 
-					NoduriGraf.erase(actual);//efectuam stergerea nodului
-
-					numberWasDeleted = true;
-					break;
-
-				}
+				numberWasDeleted = true;
+				break;
 
 			}
 
-			cout << "Stergem link-urile..." << endl;
+		}
 
-			cout << "DeletedNode index: " << DeletedNodeIndex << endl;
-			//cautam pe linie deoarece deja stim pozitia pe linie(node_position).
-			for (int i =0 ; i < MAX ;i++)
+		cout << "Stergem link-urile..." << endl;
+
+		//cautam pe linie deoarece deja stim pozitia pe linie(node_position).
+		for (int i =0 ; i < MAX ;i++)
+		{
+
+			//daca numarul de pe linie la care am ajuns are setat true in matrice inseamna ca trebuie sa stergem linkurile- punem pe false.
+				matrix[i][DeletedNodeIndex] = false;//daca avem link, il stergem
+
+		}
+
+		for (int i = 0; i < MAX; i++)
+		{
+
+			//daca numarul de pe coloana la care am ajuns are setat true in matrice inseamna ca trebuie sa stergem linkurile- punem pe false.
+			matrix[DeletedNodeIndex][i] = false;//daca avem link, il stergem
+
+		}
+
+
+		//facem tranzitiile necesare in matrice pentru a repozitiona linkurile din matrice la nodurile corespunzatoare
+		for (int transition = DeletedNodeIndex; transition < MAX; transition++)
+		{
+
+			//verificam ca indexul nodului sters sa nu fie ultimul, daca este ultimul iesim din loop-ul de rearanjare a matricei
+			if (DeletedNodeIndex == MAX-1 && transition == MAX-1)
 			{
 
-				//daca numarul de pe linie la care am ajuns are setat true in matrice inseamna ca trebuie sa stergem linkurile- punem pe false.
-					matrix[i][DeletedNodeIndex] = false;//daca avem link, il stergem
+				break;
 
 			}
-
+			
+			//interschimbam fiecare element pe pe pozitia (i,del) cu (i,del+1) - interschimbarea coloanelor
 			for (int i = 0; i < MAX; i++)
 			{
 
-				//daca numarul de pe coloana la care am ajuns are setat true in matrice inseamna ca trebuie sa stergem linkurile- punem pe false.
-				matrix[DeletedNodeIndex][i] = false;//daca avem link, il stergem
+				matrix[i][transition] = matrix[i][transition + 1];
+
+			}
+		
+			//interschimbam fiecare element pe pe pozitia (del,j) cu (del+1,j) - interschimbarea liniilor
+			for (int j = 0; j < MAX; j++)
+			{
+
+				matrix[transition][j] = matrix[transition +1][j];
 
 			}
 
-
-
-
 		}
-		catch (const char* e)
+
+
+		//ne asiguram ca pe ultima coloana vom avea doar false - pentru a pregati introducerea unui nou nod in graf
+		for (int i = 0; i < MAX; i++)
 		{
 
-			cout << e << endl;
+			matrix[i][MAX-1] = false;//trecem toate elementele de pe coloana in false
 
 		}
+
+		for (int j = 0; j < MAX; j++)
+		{
+
+			matrix[MAX-1][j] = false;//trecem toate elementele de pe linie in false
+
+		}
+		
+
+			
+	
 		if (!numberWasDeleted)
 		{
 
@@ -487,6 +527,7 @@ namespace matrix_graf
 	}
 
 
+	//functia de afisare ale nodurilor din graf
 	void Graf::afisareNoduriGraf()
 	{
 		if (this->GrafVid())
@@ -498,21 +539,11 @@ namespace matrix_graf
 
 			cout << "Graful contine:\n";
 
-			try
+
+			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 			{
 
-				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
-				{
-
-					cout << actual->get()->getData() << "\t";
-
-				}
-
-			}
-			catch (exception e)
-			{
-
-				cout << e.what() << endl;
+				cout << actual->get()->getData() << "\t";
 
 			}
 
@@ -521,6 +552,7 @@ namespace matrix_graf
 	}
 
 
+	//pentru detalii, verifica comentariile din functia InsertNode
 	void Graf::InsertNodeParam(int newNumber)
 	{
 		//verificam prima data daca avem loc de insertie
@@ -587,7 +619,7 @@ namespace matrix_graf
 	}
 
 
-	//Performanta O(n^2)
+	//pentru detalii, verifica comentariile din functia InsertArc
 	void Graf::InsertArcParam(bool ConectionType,int number1,int number2)
 	{
 
@@ -685,6 +717,7 @@ namespace matrix_graf
 	}
 
 
+	//functia de afisare a nodurilor cautate prin BFS si DFS
 	void  matrix_graf::Graf::PrintNodesSearchedInGraf()
 	{
 
@@ -698,7 +731,7 @@ namespace matrix_graf
 	}
 
 
-	//verificam daca un nod exista in lista
+	//verificam daca un nod exista intr-o lista
 	bool  matrix_graf::Graf::NodeExistsInList(shared_ptr<Node>& actual, list<shared_ptr<Node>>& li)
 	{
 
@@ -808,16 +841,17 @@ namespace matrix_graf
 	}
 
 
+	//functia de cautare prin cuprindere
 	void matrix_graf::Graf::BreadthFirstSearch()
 	{
 
 			this->NodesSearchedInGraf.clear();//vom da clear la lista in care punem nodurile gasite
-			shared_ptr<Node> actual = nullptr;
+			shared_ptr<Node> actual = nullptr;//nodul la care ajungem
 
 
 			auto it = getFirstNode();//folosim un iterator pentru a porni de la un nod dorit din lista de noduri
 			advance(it, 3);//schimbam parametrul al doilea pentru a schimba nodul de start dupa preferinte, acest numar trebuie sa fie mai mic decat MAX.
-			que.push(*it);//punem primul nod  in queue de la care dorim sa incepem, poate fi oricare nod din graf.
+			que.push(*it);//punem primul nod in queue de la care dorim sa incepem, poate fi oricare nod din graf.
 
 			list<shared_ptr<Node>> ConnectedNodesToActual{}; // cream un pointer catre lista nodurilor la care este conectat actual (actual->getNext())
 

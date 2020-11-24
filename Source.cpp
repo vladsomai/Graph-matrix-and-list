@@ -3,30 +3,17 @@
 #include "app10_3b.h"
 
 /*
-
-Aplicaţia 10.3
-Se cere să se redacteze un program care realizează următoarele activităţi:
- (1) Acceptă la intrare un graf precizat prin mulţimea nodurilor şi arcelor sale;
- (2) Vizualizează graful afişând lista nodurilor şi lista arcelor sale
- (3) Listează nodurile în ordinea parcurgerii lor pe baza căutării în adâncime;
-Programul se va realiza în două variante:
-a) Graf reprezentat prin matrice de adiacenţe;
-b) Graf reprezentat prin structuri de adiacenţe.
-Se vor utiliza reprezentările şi operatorii de la problemele 10.1 respectv 10.2
+Implementam toate problemele propuse in tema de la punctele 10.1 , 10.2, 10.3 si 10.4 in aceeasi solutie pentru a avea toate uneltele disponibile in acelasi program
 
 
-
-Folosindu-ne de implementarea de la punctele 1 si 2 vom crea 1 graf pentru matrix graf si unul pentru structure graf.
+Vom crea un graf pentru matrix graf si unul pentru structure graf.
 Graful v-a fi predefinit la rulare astfel economisind timp pentru verificari si schimbari.
 
 Afisarea structurii si matricei grafului se poate face din meniul fiecarui graf
 
-Facem implementarea cautarii prin adancime si cuprindere in aceeasi solutie.
-
-
 */
 
-
+//declaram functiile de meniu - creare graf bazat pe matrice de adiacenta si graf bazat pe structuri de liste
 void menu(shared_ptr<matrix_graf::Graf>, shared_ptr<structure_graf::Graf>);
 shared_ptr<matrix_graf::Graf> CreateMatrixGraf();
 shared_ptr<structure_graf::Graf> CreateStructureGraf();
@@ -39,7 +26,7 @@ int main()
 
 }
 
-
+//functia de meniu principal care va dirija programul, de aici putem sa trecem in oricare reprezentare dorim
 void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::Graf> structureGraf)
 {
 
@@ -84,6 +71,8 @@ void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::
 
 }
 
+
+//functie care va crea un graf bazat pe matrice de adiacenta si il va definii cu noduri
 shared_ptr<matrix_graf::Graf> CreateMatrixGraf()
 {
 
@@ -110,6 +99,8 @@ shared_ptr<matrix_graf::Graf> CreateMatrixGraf()
 
 }
 
+
+//functie care va crea un graf bazat pe structuri de liste si il va definii cu noduri
 shared_ptr<structure_graf::Graf> CreateStructureGraf()
 {
 

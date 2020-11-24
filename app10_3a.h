@@ -7,7 +7,8 @@ namespace matrix_graf
 
 	void menu(shared_ptr<Graf>);
 
-
+	
+	//functie principala care va chema meniul
 	void MatrixGraf_main(shared_ptr<Graf> matrix_graf)
 	{
 
@@ -16,6 +17,7 @@ namespace matrix_graf
 	}
 
 
+	//functia de meniu graf reprezentat prin matrice
 	void menu(shared_ptr<Graf> graf)
 	{
 

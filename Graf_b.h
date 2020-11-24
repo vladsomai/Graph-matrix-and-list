@@ -53,6 +53,7 @@ namespace structure_graf
 
 	};
 
+	//functia de verificare graf vid
 	bool Graf::GrafVid()
 	{
 
@@ -74,12 +75,15 @@ namespace structure_graf
 	}
 
 
+	//functie de stergere nod parametru dintr-o lista parametru
 	void DeleteNodeInList(shared_ptr<Node>& deleteNode, list < shared_ptr<Node>>& li)
 	{
 
+		//folosim un obiect de tipul std::list<>::iterator pentru iteratie in lista parametru
 		for (auto iterator = li.begin(); iterator != li.end(); ++iterator)
 		{
 
+			//daca nodul pe care dorim sa il stergem este cel la care am ajuns in iteratie apelam functia de erase
 			if (*iterator == deleteNode)
 			{
 
@@ -93,6 +97,7 @@ namespace structure_graf
 	}
 
 
+	//functie de afisare a coadei
 	void print_queue(queue<shared_ptr<Node>>& q)
 	{
 		cout << "Queue: ";
@@ -108,6 +113,7 @@ namespace structure_graf
 	}
 
 
+	//functie de afisare a unei liste oarecare
 	void print_list(list<shared_ptr<Node>>& li)
 	{
 
@@ -124,6 +130,7 @@ namespace structure_graf
 	}
 
 
+	//functie de afisare lista cu adresele fiecarui element din lista
 	void print_list_verbose(list<shared_ptr<Node>>& li)
 	{
 
@@ -142,6 +149,7 @@ namespace structure_graf
 	}
 
 
+	//functie de suprimare nod din graf
 	void Graf::SuprimNod()
 	{
 
@@ -167,67 +175,54 @@ namespace structure_graf
 		*/
 
 		cout << "Introduceti numarul pe care doriti sa il stergeti: "; cin >> toDelete;
-		
 
-		try
+		//iteram in lista pana cand gasim nodul pe care dorim sa il stergem
+		for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 		{
 
-			//iteram in lista pana cand gasim nodul pe care dorim sa il stergem
+			//daca cheia nodului din iteratie este egala cu numarul pe care dorim sa il stergem
+			if (toDelete == actual->get()->getData())
+			{
+
+				DeletedNode = *actual;//dereferentiem iteratorul actual si retinem adresa la nodul pe care doirm sa il stergem pentru a sterge si link-urile atasate acestui nod
+				cout << "Nodul: " << actual->get()->getData() << " va fi sters." << endl;
+				NoduriGraf.erase(actual);//efectuam stergerea nodului din lista nodurilor grafului
+				
+				cout << "Success! Nod sters." << endl;
+
+				numberWasDeleted = true;
+				break;
+
+			}
+
+		}
+
+		if (numberWasDeleted)
+		{
+
+			cout << "Stergem linkurile.." << endl;
+
+			//verificam in lista de noduri ale grafului daca avem link catre nodul sters
 			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 			{
 
-				//daca cheia nodului din iteratie este egala cu numarul pe care dorim sa il stergem
-				if (toDelete == actual->get()->getData())
-				{
+				auto paramlist = actual->get()->getNext(); //punem in variabila paramlist, lista nodului din iteratie
+				DeleteNodeInList(DeletedNode, paramlist);//apelam functia de stergere a nodului din lista
 
-					DeletedNode = *actual;//dereferentiem iteratorul actual si retinem adresa la nodul pe care doirm sa il stergem pentru a sterge si link-urile atasate acestui nod
-					cout << "Nodul: " << actual->get()->getData() << " va fi sters." << endl;
-					NoduriGraf.erase(actual);//efectuam stergerea nodului din lista nodurilor grafului
-					
-					cout << "Success! Nod sters." << endl;
-
-					numberWasDeleted = true;
-					break;
-
-				}
+				actual->get()->setNextList(paramlist);//setam lista nodului actual cu cea updatata de functia "DeleteNodeInList".
 
 			}
 
-			if (numberWasDeleted)
-			{
-
-				cout << "Stergem linkurile.." << endl;
-
-				//verificam in lista de noduri ale grafului daca avem link catre nodul sters
-				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
-				{
-
-					auto paramlist = actual->get()->getNext(); //punem in variabila paramlist, lista nodului din iteratie
-					DeleteNodeInList(DeletedNode, paramlist);//apelam functia de stergere a nodului din lista
-
-					actual->get()->setNextList(paramlist);//setam lista nodului actual cu cea updatata de functia "DeleteNodeInList".
-
-				}
-
-				return;
-
-			}
-			else 
-			{
-
-				cout << "Numarul " << toDelete << " nu exista in graf" << endl;
-				return;
-
-			}
-
+			return;
 
 		}
-		catch (exception e)
+		else 
 		{
 
-			cout << e.what() << endl;
+			cout << "Numarul " << toDelete << " nu exista in graf" << endl;
+			return;
 
-		}	
+		}
 
 	}
 
@@ -246,23 +241,12 @@ namespace structure_graf
 
 			cout << "Graful contine:\n";
 
-			try
+			shared_ptr<Node> temp{};
+
+			for (auto i = NoduriGraf.begin(); i != NoduriGraf.end(); ++i)
 			{
 
-				shared_ptr<Node> temp{};
-
-				for (auto i = NoduriGraf.begin(); i != NoduriGraf.end(); ++i)
-				{
-
-					cout << i->get()->getData() << endl;
-
-				}
-
-			}
-			catch (exception e)
-			{
-
-				cout << e.what() << endl;
+				cout << i->get()->getData() << endl;
 
 			}
 
@@ -271,9 +255,9 @@ namespace structure_graf
 	}
 
 
+	//functie de afisare structura a grafului - afisam fiecare arc pe care il are un nod pe o linie
 	void Graf::PrintStructure()
 	{
-
 
 		if (this->GrafVid())
 		{
@@ -282,61 +266,49 @@ namespace structure_graf
 
 		}
 
-		try
+		bool optiune{ false };
+
+		cout << "Doriti sa afisati si adresele nodurilor? (1 - DA / 0 - NU)" << endl;
+		cin >> optiune;
+
+		cout <<"====================Structura graf===================="<< endl;
+		if (optiune)
 		{
 
-			bool optiune{ false };
-
-			cout << "Doriti sa afisati si adresele nodurilor? (1 - DA / 0 - NU)" << endl;
-			cin >> optiune;
-
-			cout <<"====================Structura graf===================="<< endl;
-			if (optiune)
+			//iteram in lista nodurilor grafului 
+			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 			{
 
-				//iteram in lista nodurilor grafului 
-				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
-				{
+				auto tempList = actual->get()->getNext();
 
-					auto tempList = actual->get()->getNext();
+				cout << actual->get()->getData()
+					<< " (" << *actual << ") "
+					<< "  ->";
+				print_list_verbose(tempList);
 
-					cout << actual->get()->getData()
-						<< " (" << *actual << ") "
-						<< "  ->";
-					print_list_verbose(tempList);
-
-					cout << endl;
-
-				}
-
-				return;
+				cout << endl;
 
 			}
-			else
-			{
 
-				//iteram in lista nodurilor grafului 
-				for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
-				{
-
-					auto tempList = actual->get()->getNext();
-
-					cout << actual->get()->getData()<< "  ->";
-					print_list(tempList);
-
-					cout << endl;
-
-				}
-				
-				return;
-
-			}
+			return;
 
 		}
-		catch (exception e)
+		else
 		{
 
-			cout << e.what() << endl;
+			//iteram in lista nodurilor grafului 
+			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+			{
+
+				auto tempList = actual->get()->getNext();
+
+				cout << actual->get()->getData()<< "  ->";
+				print_list(tempList);
+
+				cout << endl;
+
+			}
+			
 			return;
 
 		}
@@ -344,16 +316,18 @@ namespace structure_graf
 	}
 
 
+	//functie de inserare nod in graf
 	void Graf::InsertNode()
 	{
-
-		try
+		
+    	try
 		{
 
 			int newNumber{};
 			bool numberAlreadyExists{ false };
 
 			shared_ptr<Node> newNode = make_shared<Node>();//alocam memorie pentru un nou nod al grafului
+			//daca alocarea memorie nu are loc, sarim in blocul de catch;
 
 			cout << "\nIntroduceti un numar in noul nod: ";	cin >> newNumber;
 
@@ -413,9 +387,9 @@ namespace structure_graf
 			bool numberAlreadyExists{ false };
 
 			shared_ptr<Node> newNode = make_shared<Node>();//alocam memorie pentru un nou nod al grafului
+			//daca alocarea memorie nu are loc, sarim in blocul de catch;
 
 			cout << "\nIntroduceti un numar in noul nod: ";	//cin >> newNumber;
-
 			newNode->setData(newNumber);
 
 
@@ -463,7 +437,7 @@ namespace structure_graf
 	}
 
 
-	//verificam daca un nod exista un queue-ul clasei graf
+	//verificam daca un nod exista in coada clasei graf
 	bool structure_graf::Graf::NodeExistsInQueue(shared_ptr<Node>& actual)
 	{
 		queue<shared_ptr<Node>> tempqueue = this->que;
@@ -507,6 +481,7 @@ namespace structure_graf
 	}
 
 
+	//functie de afisare a numerelor gasita de functiile BFS si DFS
 	void  structure_graf::Graf::PrintNodesSearchedInGraf()
 	{
 
@@ -542,7 +517,7 @@ namespace structure_graf
 
 
 	/*
-	-functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue;
+	-functia de cautare prin cuprindere va fi implementata folosind o structura de date de tipul queue(coada);
 	-incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor;
 	-folosim variabila "actual" pentru a itera in graf;
 
@@ -552,8 +527,6 @@ namespace structure_graf
 	*/
 	void structure_graf::Graf::BreadthFirstSearch()
 	{
-
-		cout << "\n=======Cautare prin cuprindere=======" << endl;
 
 		this->NodesSearchedInGraf.clear();//vom da clear la lista in care punem nodurile gasite
 		shared_ptr<Node> actual = nullptr;
@@ -602,13 +575,13 @@ namespace structure_graf
 
 	/*
 	-functia de cautare prin adancime implementata folosind recursivitate;
-	-incepem intotdeauna de la primul nod din lista de noduri ale grafului(NoduriGraf), se poate schimba aceasta variabila in ordinea preferintelor, incrementand iteratorul din meniul clasei;
+	-nodul de start se poate schimba in ordinea preferintelor, incrementand iteratorul din meniul clasei;
 	-folosim variabila "actual" pentru a itera in graf;
 
-	-verificam daca nodul la care am ajuns are noduri de next pe care le-am vizitat deja apeland functia "NodeExistsInList", daca nu avem nodul in lista il punem(marcam ca si vizitat);
-	-daca nodul este deja vizitat implicit se foloseste procedeul de back-tracking, iesim din functie si revenim cu pointerul de pe stack unde functia care a ramas intrerupta in for;
+	-verificam daca nodul la care am ajuns are noduri de next pe care le-am vizitat deja, apeland functia "NodeExistsInList", daca nu avem nodul in lista il punem(marcam ca si vizitat);
+	-daca nodul este deja vizitat, implicit se foloseste procedeul de back-tracking, iesim din functie si revenim cu pointerul de pe stack la functia care a ramas intrerupta in loop-ul for;
 
-	-apelam functia de cautare in adancime de fiecare node din lista de next;
+	-apelam functia de cautare in adancime de fiecare node din lista de next a lui actual;
 	*/
 	void structure_graf::Graf::DepthFirstSearch(shared_ptr<Node>& actual)
 	{
@@ -640,6 +613,7 @@ namespace structure_graf
 	}
 
 
+    //functia de inserare nod cu parametrii - cititi comentariile functiei "InsertArc" pentru detaliile pasilor facuti
 	void structure_graf::Graf::InsertArcParam(bool ConnectionType, int source, int target)
 	{
 
@@ -789,10 +763,11 @@ namespace structure_graf
 
 	}
 
-
+	//functie de inserare nod manuala din menuil clasei
 	void structure_graf::Graf::InsertArc(bool ConnectionType)
 	{
 
+		//verificarea grafului - daca avem graf vid, ne oprim
 		if (this->GrafVid())
 		{
 
@@ -804,123 +779,110 @@ namespace structure_graf
 		shared_ptr<Node> pointerToSourceNode;
 		shared_ptr<Node> pointerToTargetNode;
 
+		//variabile pentru a marca faptul ca am gasit nodurile in graf la care dorim sa adaugam un link
 		int targetWasFound{ false };
 		int sourceWasFound{ false };
 
 		cout << "Introduceti doua noduri pe care doriti sa le conectati / deconectati: " << endl;
 		
-		int source{};
-		int target{};
+		int source{0};
+		int target{0};
 
 		cout << "Primul numar: ";   cin >> source;
 		cout << "Al doilea numar: ";cin >> target;
 
-		try
+		//ne asiguram prima data ca numerele la care dorim sa introducem un arc exista in graf
+		//iteram in lista pana cand gasim nodul la care dorim sa ii adaugam un arc
+		for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
 		{
 
-			//ne asiguram prima data ca numerele la care dorim sa introducem un arc exista in graf
-			//iteram in lista pana cand gasim nodul la care dorim sa ii adaugam un arc
-			for (auto actual = NoduriGraf.begin(); actual != NoduriGraf.end(); ++actual)
+			//daca cheia nodului din iteratie este egala cu numarul pe care dorim sa il aflam, 
+			//setam pe true ca am gasit nodul si inregistram adresa nodului in variabila pointerToSource / pointerToTarget
+			if (source == actual->get()->getData())
 			{
 
-				//daca cheia nodului urmator din iteratie este egala cu numarul pe care dorim sa il aflam setam pe true si inregistram adresa nodului in variabila pointerToNode
-				if (source == actual->get()->getData())
-				{
-
-					cout << "Primul numar a fost gasit in graf" << endl;
-					sourceWasFound = true;
-					pointerToSourceNode = *actual;//salvam adresa nodului pentru operatii viitoare
-
-				}
-
-				if (target == actual->get()->getData())
-				{
-
-					cout << "Al doilea numar a fost gasit in graf" << endl;
-					targetWasFound = true;
-					pointerToTargetNode = *actual;//salvam adresa nodului pentru operatii viitoare
-
-				}
+				cout << "Primul numar a fost gasit in graf" << endl;
+				sourceWasFound = true;
+				pointerToSourceNode = *actual;//salvam adresa nodului pentru operatii viitoare
 
 			}
 
-			//dupa ce am gasit numerele facem legaturile
-			if (sourceWasFound && targetWasFound)
+			if (target == actual->get()->getData())
 			{
 
-				//--------------------------------------Nodul 1------------------------------------------------------------
-				//daca dorim sa facem legatura apelam functia de set next a nodului source
-				if (ConnectionType == true)
-				{
-
-					pointerToSourceNode->setNext(pointerToTargetNode);//stabilim legaturile source
-					pointerToTargetNode->setNext(pointerToSourceNode);//stabilim legaturile target
-					cout << "Succes, link creat!" << endl;
-
-				}
-				else//daca dorim sa stergem legatura prima data trebuie sa cautam ca exista un link intre cele doua noduri, dupa care le vom sterge.
-				{
-
-					//iteram in lista nodurilor legate la target pentru a verifica daca source exista in aceasta lista, daca exista vom sterge adresa din lista.
-					//pentru nodul target
-					auto tempListTarget = pointerToTargetNode->getNext();
-					auto tempListSource = pointerToSourceNode->getNext();
-
-					cout << "Lista lui target: ";
-					print_list(tempListTarget);
-					cout << "Lista lui source: ";
-					print_list(tempListSource);
-					
-					
-					
-					for (auto iterator = tempListTarget.begin(); iterator != tempListTarget.end(); ++iterator)
-					{
-
-						if (*iterator == pointerToSourceNode)
-						{
-
-							cout << "Nodul " << iterator->get()->getData() << " va fi sters!" << endl;
-							tempListTarget.erase(iterator);//stergem nodul source din lista
-
-							pointerToTargetNode->clearNextList();//stergem lista principala
-							pointerToTargetNode->setNextList(tempListTarget);//trimitem ca si parametru lista temporara in lista principala(refresh list)
-
-							break;
-
-						}
-
-					}
-
-					
-					//pentru nodul source
-					for (auto iterator = tempListSource.begin(); iterator != tempListSource.end(); ++iterator)
-					{
-
-						if (*iterator == pointerToTargetNode)
-						{
-
-							cout << "Nodul " << iterator->get()->getData() << " va fi sters!" << endl;
-							tempListSource.erase(iterator);//stergem nodul source din lista
-
-							pointerToSourceNode->clearNextList();//stergem lista principala
-							pointerToSourceNode->setNextList(tempListSource);//trimitem ca si parametru lista temporara in lista principala(refresh list)
-
-							break;
-
-						}
-
-					}
-					
-				}
+				cout << "Al doilea numar a fost gasit in graf" << endl;
+				targetWasFound = true;
+				pointerToTargetNode = *actual;//salvam adresa nodului pentru operatii viitoare
 
 			}
 
 		}
-		catch (exception e)
+
+		//dupa ce am gasit numerele facem legaturile
+		if (sourceWasFound && targetWasFound)
 		{
 
-			cout << e.what() << endl;
-			return;
+			//--------------------------------------Nodul 1------------------------------------------------------------
+			//daca dorim sa facem legatura apelam functia de set next a nodului source
+			if (ConnectionType == true)
+			{
+
+				//target are link catre source si vice-versa
+				pointerToSourceNode->setNext(pointerToTargetNode);//stabilim legaturile source
+				pointerToTargetNode->setNext(pointerToSourceNode);//stabilim legaturile target
+				cout << "Succes, link creat!" << endl;
+
+			}
+			else//daca dorim sa stergem legatura prima data trebuie sa cautam ca exista un link intre cele doua noduri, dupa care le vom sterge.
+			{
+
+				//iteram in lista nodurilor legate la target(target->getNext()) pentru a verifica daca source exista in aceasta lista, daca exista vom sterge adresa din lista.
+				
+				//listele de next a celor doua noduri le vom retine intr-o variabila temporara
+				auto tempListTarget = pointerToTargetNode->getNext();
+				auto tempListSource = pointerToSourceNode->getNext();
+
+				//iteram in lista lui target
+				for (auto iterator = tempListTarget.begin(); iterator != tempListTarget.end(); ++iterator)
+				{
+
+					//daca am gasit in lista lui target nodul source, vom sterge nodul source(astfel eliminam arcul de la target la source) 
+					if (*iterator == pointerToSourceNode)
+					{
+
+						cout << "Nodul " << iterator->get()->getData() << " va fi sters!" << endl;
+						tempListTarget.erase(iterator);//stergem nodul source din lista
+
+						pointerToTargetNode->clearNextList();//stergem lista principala
+						pointerToTargetNode->setNextList(tempListTarget);//trimitem ca si parametru lista temporara,modificata, in lista principala(refresh list)
+
+						break;
+
+					}
+
+				}
+
+				//iteram in lista lui source
+				for (auto iterator = tempListSource.begin(); iterator != tempListSource.end(); ++iterator)
+				{
+
+					//daca am gasit in lista lui source nodul target, vom sterge nodul target(astfel eliminam arcul de la source la target) 
+					if (*iterator == pointerToTargetNode)
+					{
+
+						cout << "Nodul " << iterator->get()->getData() << " va fi sters!" << endl;
+						tempListSource.erase(iterator);//stergem nodul target din lista
+
+						pointerToSourceNode->clearNextList();//stergem lista principala
+						pointerToSourceNode->setNextList(tempListSource);//trimitem ca si parametru lista temporara,modificata, in lista principala(refresh list)
+
+						break;
+
+					}
+
+				}
+				
+			}
 
 		}
 

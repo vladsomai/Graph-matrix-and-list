@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+//definim nodul implementarii unui graf prin matrice de adiacenta
 namespace matrix_graf
 {
 
@@ -25,7 +27,6 @@ namespace matrix_graf
 			this->data = 0;
 
 		}
-
 
 	};
 
