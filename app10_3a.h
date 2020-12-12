@@ -22,6 +22,7 @@ namespace matrix_graf
 	{
 
 		int optiune = 0;
+		bool grafVid{};
 		auto it = graf->getFirstNode();
 
 		do
@@ -38,7 +39,7 @@ namespace matrix_graf
 			cout << "5.Graf vid.\n";
 			cout << "6.Graf plin.\n";
 
-			cout << "7.Afisare graf.\n";
+			cout << "7.Afisare noduri graf.\n";
 			cout << "8.Afisare matrice.\n";
 
 			cout << "9. Cautare prin adancime - DFS.\n";
@@ -74,7 +75,8 @@ namespace matrix_graf
 				break;
 
 			case 5:
-				graf->GrafVid();
+			    grafVid = graf->GrafVid();
+				if (grafVid) cout << "True"; else cout << "False";
 				cout << endl;
 				break;
 			case 6:

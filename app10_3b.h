@@ -19,6 +19,7 @@ namespace structure_graf
 	void menu(shared_ptr<Graf> graf)
 	{
 
+		bool grafVid{};
 		int optiune = 0;
 		auto it = graf->getFirstNode();
 
@@ -73,7 +74,8 @@ namespace structure_graf
 				cout << endl;
 				break;
 			case 5:
-				graf->GrafVid();
+				grafVid = graf->GrafVid();
+				if (grafVid) cout << "True"; else cout << "False";
 				cout << endl;
 				break;
 			case 6:
