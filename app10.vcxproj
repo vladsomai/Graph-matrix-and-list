@@ -24,6 +24,7 @@
     <ProjectGuid>{152dd190-4429-4fa1-8cfa-248221fac360}</ProjectGuid>
     <RootNamespace>app103</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>app10</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -139,15 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app10_3a.h" />
-    <ClInclude Include="app10_3b.h" />
-    <ClInclude Include="Graf_a.h" />
-    <ClInclude Include="Graf_b.h" />
-    <ClInclude Include="Node_a.h" />
-    <ClInclude Include="Node_b.h" />
+    <ClInclude Include="app10_matrix.h" />
+    <ClInclude Include="app10_structure.h" />
+    <ClInclude Include="Graf_matrix.h" />
+    <ClInclude Include="Graf_structure.h" />
+    <ClInclude Include="Node_matrix.h" />
+    <ClInclude Include="Node_structure.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

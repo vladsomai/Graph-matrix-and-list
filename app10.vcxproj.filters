@@ -15,28 +15,28 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="Graf_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graf_structure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Node_structure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="app10_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="app10_structure.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app10_3a.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graf_a.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graf_b.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node_a.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Node_b.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="app10_3b.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

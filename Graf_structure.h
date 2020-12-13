@@ -1,4 +1,4 @@
-#include"Node_b.h"
+#include"Node_structure.h"
 #include <queue>
 
 namespace structure_graf
@@ -24,7 +24,7 @@ namespace structure_graf
 		void InsertArcParam(bool, int, int);
 
 		void DepthFirstSearch(shared_ptr<Node>&);
-		void BreadthFirstSearch();
+		void BreadthFirstSearch(shared_ptr<Node>&);
 
 		bool NodeExistsInQueue(shared_ptr<Node>&);
 		bool NodeExistsInNodesSearchedInGraf(shared_ptr<Node>&);
@@ -33,6 +33,8 @@ namespace structure_graf
 		void PrintStructure();
 		void afisareNoduriGraf();
 		void PrintNodesSearchedInGraf();
+
+		size_t sizeof_NoduriGraf() { return NoduriGraf.size(); }
 		
 		void clearSearchedList() { NodesSearchedInGraf.clear(); }
 		auto getFirstNode() { return this->NoduriGraf.begin(); }
@@ -525,13 +527,13 @@ namespace structure_graf
 	in queue sau in lista cu noduri pe care le-am gasit,
 	dupa care iteram in queue atata timp cat nu este gol
 	*/
-	void structure_graf::Graf::BreadthFirstSearch()
+	void structure_graf::Graf::BreadthFirstSearch(shared_ptr<Node>& firstNode)
 	{
 
 		this->NodesSearchedInGraf.clear();//vom da clear la lista in care punem nodurile gasite
 		shared_ptr<Node> actual = nullptr;
 		
-		que.push(*(this->NoduriGraf.begin()));//punem primul nod  in queue de la care dorim sa incepem, poate fi oricare nod din graf.
+		que.push(firstNode);//punem primul nod  in queue de la care dorim sa incepem, poate fi oricare nod din graf.
 
 		list<shared_ptr<Node>> ConnectedNodesToActual{}; // cream un pointer catre lista nodurilor la care este conectat actual (actual->getNext())
 

@@ -1,4 +1,4 @@
-#include"Node_a.h"
+#include"Node_matrix.h"
 
 namespace matrix_graf
 {
@@ -29,7 +29,7 @@ namespace matrix_graf
 		void InsertArcParam(bool,int,int);
 
 		void DepthFirstSearch(shared_ptr<Node>& );
-		void BreadthFirstSearch();
+		void BreadthFirstSearch(shared_ptr<Node>& );
 
 		void PrintNodesSearchedInGraf();
 		bool NodeExistsInList(shared_ptr<Node>&, list<shared_ptr<Node>>&);
@@ -39,6 +39,8 @@ namespace matrix_graf
 
 		void clearSearchedList() { NodesSearchedInGraf.clear(); }
 		auto getFirstNode() { return this->NoduriGraf.begin(); }
+
+		size_t sizeof_NoduriGraf() { return NoduriGraf.size(); };
 
 		list<shared_ptr<Node>> searchForArc(shared_ptr<Node>&, int);
 		int nodePosition(shared_ptr<Node>&, list<shared_ptr<Node>>&);
@@ -793,11 +795,10 @@ namespace matrix_graf
 				//daca numarul de pe coloana la care am ajuns are setat true in matrice inseamna ca trebuie sa il adaugam in lista de connected.
 				if (matrix[node_position][j] == true)
 				{
+
 					advance(it, j);//ducem iteratorul cu j pozitii in NoduriGraf dupa care il adaugam in lista ConnectedNodesToActual
 					ConnectedNodesToActual.push_back(*it);
 
-				
-				
 				}
 				it = this->getFirstNode();//reinitializam iteratorul cu primul nod din NoduriGraf, deoarece dorim ca in urmatoarea iteratie sa avansam cu j pozitii din nou in cazul in care gasim un nod cu link.
 				j++;//incrementam pozitia coloanei
@@ -841,17 +842,14 @@ namespace matrix_graf
 	}
 
 
-	//functia de cautare prin cuprindere
-	void matrix_graf::Graf::BreadthFirstSearch()
+	//functia de cautare prin cuprindere primeste ca si parametru nodul de start
+	void matrix_graf::Graf::BreadthFirstSearch(shared_ptr<Node>& firstNode)
 	{
 
 			this->NodesSearchedInGraf.clear();//vom da clear la lista in care punem nodurile gasite
 			shared_ptr<Node> actual = nullptr;//nodul la care ajungem
 
-
-			auto it = getFirstNode();//folosim un iterator pentru a porni de la un nod dorit din lista de noduri
-			advance(it, 3);//schimbam parametrul al doilea pentru a schimba nodul de start dupa preferinte, acest numar trebuie sa fie mai mic decat MAX.
-			que.push(*it);//punem primul nod in queue de la care dorim sa incepem, poate fi oricare nod din graf.
+			que.push(firstNode);//punem primul nod in queue de la care dorim sa incepem, poate fi oricare nod din graf.
 
 			list<shared_ptr<Node>> ConnectedNodesToActual{}; // cream un pointer catre lista nodurilor la care este conectat actual (actual->getNext())
 

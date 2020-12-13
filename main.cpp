@@ -1,6 +1,6 @@
 ﻿#include <iostream>
-#include "app10_3a.h"
-#include "app10_3b.h"
+#include "app10_matrix.h"
+#include "app10_structure.h"
 
 /*
 Implementam toate problemele propuse in tema de la punctele 10.1 , 10.2, 10.3 si 10.4 in aceeasi solutie pentru a avea toate uneltele disponibile in acelasi program
