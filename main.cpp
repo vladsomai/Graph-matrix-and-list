@@ -1,38 +1,25 @@
 ﻿#include <iostream>
-#include "app10_matrix.h"
-#include "app10_structure.h"
+#include "Matrix_main.h"
+#include "List_main.h"
 
-/*
-Implementam toate problemele propuse in tema de la punctele 10.1 , 10.2, 10.3 si 10.4 in aceeasi solutie pentru a avea toate uneltele disponibile in acelasi program
+using std::shared_ptr;
+using std::make_shared;
+using std::cin;
+using std::cout;
+using std::endl;
 
-
-Vom crea un graf pentru matrix graf si unul pentru structure graf.
-Graful v-a fi predefinit la rulare astfel economisind timp pentru verificari si schimbari.
-
-Afisarea structurii si matricei grafului se poate face din meniul fiecarui graf
-
-*/
-
-//declaram functiile de meniu - creare graf bazat pe matrice de adiacenta si graf bazat pe structuri de liste
 void menu(shared_ptr<matrix_graf::Graf>, shared_ptr<structure_graf::Graf>);
 shared_ptr<matrix_graf::Graf> CreateMatrixGraf();
 shared_ptr<structure_graf::Graf> CreateStructureGraf();
 
-
 int main()
 {
-
 	menu(CreateMatrixGraf(), CreateStructureGraf());
-
 }
 
-//functia de meniu principal care va dirija programul, de aici putem sa trecem in oricare reprezentare dorim
-void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::Graf> structureGraf)
+void menu(shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::Graf> structureGraf)
 {
-
-	int optiune = 0;
-
-
+	int option = 0;
 	do
 	{
 		system("cls");
@@ -43,39 +30,36 @@ void menu( shared_ptr<matrix_graf::Graf> matrixGraf, shared_ptr<structure_graf::
 
 		cout << "0.Exit.\n";
 
-		cout << "Optiunea dvs. : ";
-		cin >> optiune;
+		cout << "Your option: ";
+		cin >> option;
 
 		cout << "\n\n======OUTPUT======" << endl;
-		switch (optiune)
+		switch (option)
 		{
 		case 0:
 			cout << "\n\nExiting..." << endl;
 			break;
+
 		case 1:
 			matrix_graf::MatrixGraf_main(matrixGraf);
 			cout << endl;
 			break;
+
 		case 2:
 			structure_graf::StructureGraf_main(structureGraf);
 			cout << endl;
 			break;
 
 		default:
-			cout << "Optiune gresita...\n";
+			cout << "Wrong option...\n";
 			cout << endl;
 			break;
 		};
-
-	} while (optiune != 0);
-
+	} while (option != 0);
 }
 
-
-//functie care va crea un graf bazat pe matrice de adiacenta si il va definii cu noduri
 shared_ptr<matrix_graf::Graf> CreateMatrixGraf()
 {
-
 	shared_ptr<matrix_graf::Graf> matrix_grafExample = make_shared<matrix_graf::Graf>();
 	matrix_grafExample->InsertNodeParam(2);
 	matrix_grafExample->InsertNodeParam(5);
@@ -96,14 +80,10 @@ shared_ptr<matrix_graf::Graf> CreateMatrixGraf()
 	matrix_grafExample->InsertArcParam(true, 7, 13);
 
 	return matrix_grafExample;
-
 }
 
-
-//functie care va crea un graf bazat pe structuri de liste si il va definii cu noduri
 shared_ptr<structure_graf::Graf> CreateStructureGraf()
 {
-
 	shared_ptr<structure_graf::Graf> structure_grafExample = make_shared<structure_graf::Graf>();
 	structure_grafExample->InsertNodeParam(2);
 	structure_grafExample->InsertNodeParam(5);
@@ -124,6 +104,4 @@ shared_ptr<structure_graf::Graf> CreateStructureGraf()
 	structure_grafExample->InsertArcParam(true, 7, 13);
 
 	return structure_grafExample;
-
 }
-

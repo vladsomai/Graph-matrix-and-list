@@ -1,34 +1,25 @@
 ﻿#include <iostream>
-#include "Graf_matrix.h"
+#include "List_main.h"
 
-
-namespace matrix_graf
+namespace structure_graf
 {
+	using std::shared_ptr;
 
-	void menu(shared_ptr<Graf>);
-
-	
-	//functie principala care va chema meniul
-	void MatrixGraf_main(shared_ptr<Graf> matrix_graf)
+	void StructureGraf_main(std::shared_ptr<Graf> structure_graf)
 	{
-
-		menu(matrix_graf);
-
+		menu(structure_graf);
 	}
 
-
-	//functia de meniu graf reprezentat prin matrice
 	void menu(shared_ptr<Graf> graf)
 	{
-
-		int optiune = 0;
+		bool grafVid{};
 		size_t dfsOption{};
 		size_t bfsOption{};
-		bool grafVid{};
+		int optiune = 0;
 		auto it = graf->getFirstNode();
-
 		do
 		{
+
 			system("cls");
 			cout << "\n\n======MENU======\n";
 
@@ -39,13 +30,14 @@ namespace matrix_graf
 			cout << "4.Suprima arc.\n";
 
 			cout << "5.Graf vid.\n";
-			cout << "6.Graf plin.\n";
 
-			cout << "7.Afisare noduri graf.\n";
-			cout << "8.Afisare matrice.\n";
 
-			cout << "9. Cautare prin adancime - DFS.\n";
-     		cout << "10.Cautare prin cuprindere - BFS.\n";
+			cout << "6.Afisare noduri graf.\n";
+			cout << "7.Afisare structura.\n";
+
+			cout << "8.Cautare prin adancime - DFS.\n";
+			cout << "9.Cautare prin cuprindere - BFS.\n";
+
 
 			cout << "0.Exit.\n";
 
@@ -75,47 +67,42 @@ namespace matrix_graf
 				graf->InsertArc(false);
 				cout << endl;
 				break;
-
 			case 5:
-			    grafVid = graf->GrafVid();
+				grafVid = graf->GrafVid();
 				if (grafVid) cout << "True"; else cout << "False";
 				cout << endl;
 				break;
 			case 6:
-				graf->GrafPlin();
-				cout << endl;
-				break;
-			case 7:
 				graf->afisareNoduriGraf();
 				cout << endl;
 				break;
-			case 8:
-				graf->PrintMatrix();
+			case 7:
+				graf->PrintStructure();
 				cout << endl;
 				break;
-			case 9:
+			case 8:
 				cout << "\n=======Cautare prin adancime=======" << endl;
 
 				//tratam cazul in care dorim sa incepem de la un element mai mare ca si size-ul listei de noduri graf
 				cout << "Introduceti al catelea element sa fie cel de start:"; cin >> dfsOption;
-				if(dfsOption >= graf->sizeof_NoduriGraf())
+				if (dfsOption >= graf->sizeof_NoduriGraf())
 				{
-					
+
 					cout << "Numarul introdus este mai mare decat marimea grafului" << endl;
 					break;
 
 				}
+				it = graf->getFirstNode();//resetam iteratorul la primul nod dupa ce am terminat executia
+				advance(it, dfsOption);//setam al catelea element din lista sa fie luat ca si parametru
 
 				graf->clearSearchedList();
-				it = graf->getFirstNode();//resetam iteratorul la primul nod
-				advance(it, dfsOption);//setam al catelea element din lista sa fie luat ca si parametru
-				graf->DepthFirstSearch(*it);
-				cout << endl;
+				
+			    graf->DepthFirstSearch(*it);
 				graf->PrintNodesSearchedInGraf();
-				it = graf->getFirstNode();//resetam iteratorul la primul nod dupa ce am terminat executia
 				cout << endl;
+				
 				break;
-			case 10:
+			case 9:
 				cout << "\n=======Cautare prin cuprindere=======" << endl;
 
 				//tratam cazul in care dorim sa incepem de la un element mai mare ca si size-ul listei de noduri graf
@@ -131,7 +118,7 @@ namespace matrix_graf
 				it = graf->getFirstNode();//folosim un iterator pentru a porni de la un nod dorit din lista de noduri
 				advance(it, bfsOption);
 
-
+				graf->clearSearchedList();
 				graf->BreadthFirstSearch(*it);
 				cout << endl;
 				break;
@@ -143,6 +130,7 @@ namespace matrix_graf
 			};
 
 			system("pause");
+
 		} while (optiune != 0);
 
 	}

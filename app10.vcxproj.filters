@@ -15,27 +15,45 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Graf_matrix.h">
+    <ClInclude Include="Matrix_graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graf_structure.h">
+    <ClInclude Include="List_graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node_matrix.h">
+    <ClInclude Include="Matrix_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node_structure.h">
+    <ClInclude Include="List_node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app10_matrix.h">
+    <ClInclude Include="Matrix_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="app10_structure.h">
+    <ClInclude Include="List_main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix_graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List_graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="List_node.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix_node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -140,15 +140,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="List_graph.cpp" />
+    <ClCompile Include="List_node.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix_graph.cpp" />
+    <ClCompile Include="Matrix_node.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="app10_matrix.h" />
-    <ClInclude Include="app10_structure.h" />
-    <ClInclude Include="Graf_matrix.h" />
-    <ClInclude Include="Graf_structure.h" />
-    <ClInclude Include="Node_matrix.h" />
-    <ClInclude Include="Node_structure.h" />
+    <ClCompile Include="Matrix_main.cpp" />
+    <ClCompile Include="List_main.cpp" />
+    <ClInclude Include="List_main.h" />
+    <ClInclude Include="Matrix_graph.h" />
+    <ClInclude Include="List_graph.h" />
+    <ClInclude Include="Matrix_main.h" />
+    <ClInclude Include="Matrix_node.h" />
+    <ClInclude Include="List_node.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
